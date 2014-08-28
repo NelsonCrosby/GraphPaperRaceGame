@@ -45,3 +45,28 @@ It's gonna be this way, because we might eventually go to Maven or something
 - `src/test/java`: you can guess
 - `src/test/resources`: extras that end up in the jar, only visible to test 
    sources.
+
+
+## IDEA Project setup ###
+
+1. File -> Project Structure...
+2. (on left) Modules -> (tab in right pane) Sources
+3. Notice 'Mark As:' above directory tree
+    - If any of the following directories are missing, you may need to come
+       back here later.
+4. Mark `src/main/groovy` as Sources Root
+5. Mark `src/main/java` as Sources Root
+6. Mark `src/main/resources` as Resources Root
+7. Mark `src/test/groovy` as Test Sources Root
+8. Mark `src/test/java` as Test Sources Root
+9. Mark `src/test/resources` as Test Resources Root
+10. (on left) Libraries -> (middle section) Add (the plus icon)
+     - `lib/lwjgl.jar` and `lib/lwjgl_util.jar`
+11. Add `lib/slick.jar`
+12. Apply/Close
+13. Open `src/main/groovy/io.github.nelsoncrosby.gridrace/GridRace.groovy`
+14. Right-Click -> Create GridRace.main()...
+15. VM Options: `-Djava.library.path=lib/natives/$your_os`
+     - Where `$your_os` is one of `windows`, `macosx`, or `linux`
+16. Apply/Close
+17. Run, and hope for the best.
