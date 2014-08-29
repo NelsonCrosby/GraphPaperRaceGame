@@ -1,0 +1,16 @@
+apply plugin: 'groovy'
+
+// Compatible with Java 7
+sourceCompatibility = 1.7
+// No versions until we actually start working on the project proper
+version = '0.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.slick2d:slick2d-core:1.0.1'
+    // Using JUnit for testing (when that happens)
+    testCompile 'junit:junit:4.11'
+}
