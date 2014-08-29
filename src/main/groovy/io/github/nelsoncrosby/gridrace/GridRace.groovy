@@ -7,7 +7,7 @@ import org.newdawn.slick.Graphics
 import org.newdawn.slick.SlickException
 
 /**
- *
+ * Root game loop class
  */
 class GridRace extends BasicGame {
 
