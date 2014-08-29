@@ -30,19 +30,18 @@ This game will initially be implemented in Groovy using [Slick2D] 1.0.1. There
         to 80 where possible.
     - Generated files have no limit, as that can sometimes get too tricky to
         manage.
-- Building should be manageable by an IDE's built-in system. While dependencies
-   and distribution may eventually be handled by Gradle or something (which an
-   IDE should be fully able to process anyway), the IDE should be fully capable
-   of accurately compiling the project itself. Relying on external tools can
-   slow down this process.
+- Compiling should be relatively trivial for an IDE. That is - if your IDEs
+    built-in compiler can interpret Gradle dependencies, then it should be able
+    to compile without any extra configuration.
+- Gradle must be used for resolving dependencies (including natives).
 - If your commit is related to a Trello card, the second line should be in the
-   format `[List/Card]`. This makes for easy reference.
+    format `[List/Card]`. This makes for easy reference.
 
 
 ### Directory structure ###
 
-It's gonna be this way, because we might eventually go to Gradle or something
- which enforces this.
+It's gonna be this way, because Gradle prefers it like this. Also, it makes
+ a fair bit of sense (everything has its place).
 
 - `src/main/groovy`: all Groovy sources
 - `src/main/java`: all Java sources
@@ -55,27 +54,12 @@ It's gonna be this way, because we might eventually go to Gradle or something
 
 ### IDE setup ###
 
-You should configure the following for your IDE:
-
-- Languages
-    - Java language level: 7.0
-    - Groovy SDK version: 2.3.6
-- Source roots
-    - `src/main/groovy`: Source
-    - `src/main/java`: Source
-    - `src/main/resources`: Resource
-    - `src/test/groovy`: Test source
-    - `src/test/java`: Test source
-    - `src/test/resources`: Test resources
-- Libraries
-    - LWJGL
-        - `lib/lwjgl.jar`
-        - `lib/lwjgl_util.jar`
-    - Slick
-        - `lib/slick.jar`
-- Run configurations (for configuring LWJGL)
-    - VM Options: `-Djava.library.path=lib/natives/<your_os>`
-    - Working directory: `<project_root>`
+- Import the project from `build.gradle`.
+- Run one of the `${platform}Natives` tasks provided by Gradle, in order to get
+    the appropriate set for your system (e.g. `$ gradle linuxNatives`)
+- Set the following in your run configurations:
+    - Main class: `io.github.nelsoncrosby.gridrace.GridRace`
+    - VM Options: `-Djava.library.path=lib/natives-${platform}`
 
 
 ### Finding something to help with ###

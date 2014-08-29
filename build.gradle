@@ -16,7 +16,7 @@ dependencies {
 }
 
 // Make natives work
-// Adapted from solution provided by Szczepan Faber on
+// Copied from solution provided by Szczepan Faber on
 //  http://forums.gradle.org/gradle/topics/how_to_use_lwjgl_or_how_to_use_native_libraries
 
 ['windows', 'linux', 'osx'].each { platform ->
