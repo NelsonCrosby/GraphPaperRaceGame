@@ -3,7 +3,7 @@ package io.github.nelsoncrosby.gridrace
 import org.newdawn.slick.*
 
 /**
- *
+ * Root game loop class
  */
 class GridRace extends BasicGame {
 
