@@ -25,17 +25,23 @@ This game will initially be implemented in Groovy using [Slick2D] 1.0.1. There
 ### Ground rules ###
 
 - Keep all lines to a maximum of 80 characters.
-  - The hard limit for XML is 120 characters.
-  - The hard limit for Java source is 120 characters, but try to keep it down
-     to 80 where possible.
-- Building should be simple. Provided your IDE supports dependencies via
-   Gradle and Groovy/Java compiling, you should be able to use that. Don't
-   write code that might compromise this.
+    - The hard limit for XML is 120 characters.
+    - The hard limit for Java source is 120 characters, but try to keep it down
+        to 80 where possible.
+    - Generated files have no limit, as that can sometimes get too tricky to
+        manage.
+- Building should be manageable by an IDE's built-in system. While dependencies
+   and distribution may eventually be handled by Gradle or something (which an
+   IDE should be fully able to process anyway), the IDE should be fully capable
+   of accurately compiling the project itself. Relying on external tools can
+   slow down this process.
+- If your commit is related to a Trello card, the second line should be in the
+   format `[List/Card]`. This makes for easy reference.
 
 
 ### Directory structure ###
 
-It's gonna be this way, because we might eventually go to Maven or something
+It's gonna be this way, because we might eventually go to Gradle or something
  which enforces this.
 
 - `src/main/groovy`: all Groovy sources
@@ -47,26 +53,32 @@ It's gonna be this way, because we might eventually go to Maven or something
    sources.
 
 
-## IDEA Project setup ###
+### IDE setup ###
 
-1. File -> Project Structure...
-2. (on left) Modules -> (tab in right pane) Sources
-3. Notice 'Mark As:' above directory tree
-    - If any of the following directories are missing, you may need to come
-       back here later.
-4. Mark `src/main/groovy` as Sources Root
-5. Mark `src/main/java` as Sources Root
-6. Mark `src/main/resources` as Resources Root
-7. Mark `src/test/groovy` as Test Sources Root
-8. Mark `src/test/java` as Test Sources Root
-9. Mark `src/test/resources` as Test Resources Root
-10. (on left) Libraries -> (middle section) Add (the plus icon)
-     - `lib/lwjgl.jar` and `lib/lwjgl_util.jar`
-11. Add `lib/slick.jar`
-12. Apply/Close
-13. Open `src/main/groovy/io.github.nelsoncrosby.gridrace/GridRace.groovy`
-14. Right-Click -> Create GridRace.main()...
-15. VM Options: `-Djava.library.path=lib/natives/$your_os`
-     - Where `$your_os` is one of `windows`, `macosx`, or `linux`
-16. Apply/Close
-17. Run, and hope for the best.
+You should configure the following for your IDE:
+
+- Languages
+    - Java language level: 7.0
+    - Groovy SDK version: 2.3.6
+- Source roots
+    - `src/main/groovy`: Source
+    - `src/main/java`: Source
+    - `src/main/resources`: Resource
+    - `src/test/groovy`: Test source
+    - `src/test/java`: Test source
+    - `src/test/resources`: Test resources
+- Libraries
+    - LWJGL
+        - `lib/lwjgl.jar`
+        - `lib/lwjgl_util.jar`
+    - Slick
+        - `lib/slick.jar`
+- Run configurations (for configuring LWJGL)
+    - VM Options: `-Djava.library.path=lib/natives/<your_os>`
+    - Working directory: `<project_root>`
+
+
+### Finding something to help with ###
+
+If you want to contribute, best thing to do would be to go to the Trello board,
+ and look for an unassigned card. Then do the standard contribution thingy.
