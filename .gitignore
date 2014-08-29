@@ -3,3 +3,7 @@
 *.iml
 
 junk/
+lib/
+
+.gradle
+build/

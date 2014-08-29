@@ -14,3 +14,26 @@ dependencies {
     // Using JUnit for testing (when that happens)
     testCompile 'junit:junit:4.11'
 }
+
+// Make natives work
+// Adapted from solution provided by Szczepan Faber on
+//  http://forums.gradle.org/gradle/topics/how_to_use_lwjgl_or_how_to_use_native_libraries
+
+['windows', 'linux', 'osx'].each { platform ->
+    task "${platform}Natives" {
+        def outputDir = "lib/natives-$platform"
+        inputs.files(configurations.compile)
+        outputs.dir(outputDir)
+        doLast {
+            copy {
+                def artifacts = configurations.compile
+                        .resolvedConfiguration.resolvedArtifacts
+                        .findAll { it.classifier == "natives-$platform" }
+                artifacts.each {
+                    from zipTree(it.file)
+                }
+                into outputDir
+            }
+        }
+    }
+}
