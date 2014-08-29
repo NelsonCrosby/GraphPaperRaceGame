@@ -10,9 +10,9 @@ import org.newdawn.slick.SlickException
  *
  */
 class GridRace extends BasicGame {
-    String TITLE = "GridRace";
-    GridRace() {
-        super(GridRace.TITLE)
+
+    GridRace(String title) {
+        super(title)
     }
 
     @Override
@@ -35,7 +35,7 @@ class GridRace extends BasicGame {
      * @param args Command-line arguments
      */
     static void main(String[] args) {
-        AppGameContainer appgc = new AppGameContainer(new GridRace())
+        AppGameContainer appgc = new AppGameContainer(new GridRace("GridRace"))
         appgc.setDisplayMode(640, 480, false)
         appgc.start()
     }
