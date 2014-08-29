@@ -1,18 +1,14 @@
 package io.github.nelsoncrosby.gridrace
 
-import org.newdawn.slick.AppGameContainer
-import org.newdawn.slick.BasicGame
-import org.newdawn.slick.GameContainer
-import org.newdawn.slick.Graphics
-import org.newdawn.slick.SlickException
+import org.newdawn.slick.*
 
 /**
  *
  */
 class GridRace extends BasicGame {
-    String TITLE = "GridRace";
+
     GridRace() {
-        super(GridRace.TITLE)
+        super((String) CONST['title'])
     }
 
     @Override
