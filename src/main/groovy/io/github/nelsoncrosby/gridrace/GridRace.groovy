@@ -12,17 +12,17 @@ class GridRace extends BasicGame {
     }
 
     @Override
-    void init(GameContainer gameContainer) throws SlickException {
+    void init(GameContainer gc) throws SlickException {
         println 'init'
     }
 
     @Override
-    void update(GameContainer gameContainer, int i) throws SlickException {
+    void update(GameContainer gc, int delta) throws SlickException {
         print 'update\r'
     }
 
     @Override
-    void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
+    void render(GameContainer gc, Graphics gx) throws SlickException {
         print 'render\r'
     }
 
