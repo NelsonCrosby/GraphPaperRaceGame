@@ -4,13 +4,9 @@ package io.github.nelsoncrosby.gridrace
  *
  */
 class CONST {
-    private static Properties constants
-    static {
-        constants = new Properties()
-        constants.load(CONST.getResourceAsStream('const.properties'))
-    }
+    static final int LEFT_BUTTON = 0
+    static final int RIGHT_BUTTON = 1
+    static final int MIDDLE_BUTTON = 2
 
-    static Object getAt(Object key) {
-        return constants.getAt(key)
-    }
+    static final String TITLE = "GridRace"
 }
