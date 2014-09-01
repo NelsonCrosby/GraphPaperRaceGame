@@ -56,6 +56,7 @@ class GridRace extends BasicGame {
     void render(GameContainer gc, Graphics gx) throws SlickException {
         gx.color = color
         gx.fillRect(rectX, rectY, 100, 100)
+        gx.drawArc(100, 100, 100, 200, 0, 250)
     }
 
     /**
