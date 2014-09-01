@@ -6,7 +6,9 @@ import org.newdawn.slick.*
  *
  */
 class GridRace extends BasicGame {
-    boolean x = true
+    static final int LEFT_BUTTON = 0
+    Color color
+    Random rnd
 
     GridRace() {
         super((String) CONST['title'])
@@ -15,6 +17,8 @@ class GridRace extends BasicGame {
     @Override
     void init(GameContainer gc) throws SlickException {
         println 'init'
+        color = new Color(255, 255, 255)
+        rnd = new Random()
     }
 
     @Override
@@ -23,8 +27,19 @@ class GridRace extends BasicGame {
     }
 
     @Override
-    void render(GameContainer gc, Graphics gx) throws SlickException {
+    void mouseClicked(int button, int x, int y, int clickCount) {
+        if (button == LEFT_BUTTON) {
+            short red = rnd.nextInt(256)
+            short green = rnd.nextInt(256)
+            short blue = rnd.nextInt(256)
+            color = new Color(red, green, blue)
+        }
+    }
 
+    @Override
+    void render(GameContainer gc, Graphics gx) throws SlickException {
+        gx.color = color
+        gx.fillRect(100, 100, 100, 100)
     }
 
     /**
