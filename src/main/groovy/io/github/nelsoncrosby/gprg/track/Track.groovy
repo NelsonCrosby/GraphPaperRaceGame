@@ -6,6 +6,9 @@ import org.newdawn.slick.Graphics
  *
  */
 class Track {
+    static final char OUT_OF_BOUNDS = 'X',
+                      ON_TRACK = ' '
+
     char[][] grid
 
     Track(File file) {
