@@ -9,6 +9,10 @@ class GridRace extends BasicGame {
     static final int LEFT_BUTTON = 0
     Color color
     Random rnd
+    int rectX = 100
+    int rectY = 100
+    int rectSpeed = 5
+    Input input
 
     GridRace() {
         super((String) CONST['title'])
@@ -17,13 +21,25 @@ class GridRace extends BasicGame {
     @Override
     void init(GameContainer gc) throws SlickException {
         println 'init'
+        input = new Input(gc.height)
         color = new Color(255, 255, 255)
         rnd = new Random()
     }
 
     @Override
     void update(GameContainer gc, int delta) throws SlickException {
-
+        if (input.isKeyDown(Input.KEY_W)) {
+            rectY -= rectSpeed
+        }
+        if (input.isKeyDown(Input.KEY_S)) {
+            rectY += rectSpeed
+        }
+        if (input.isKeyDown(Input.KEY_A)) {
+            rectX -= rectSpeed
+        }
+        if (input.isKeyDown(Input.KEY_D)) {
+            rectX += rectSpeed
+        }
     }
 
     @Override
@@ -39,7 +55,7 @@ class GridRace extends BasicGame {
     @Override
     void render(GameContainer gc, Graphics gx) throws SlickException {
         gx.color = color
-        gx.fillRect(100, 100, 100, 100)
+        gx.fillRect(rectX, rectY, 100, 100)
     }
 
     /**
