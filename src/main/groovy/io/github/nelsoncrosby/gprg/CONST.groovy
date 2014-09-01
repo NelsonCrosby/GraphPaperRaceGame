@@ -1,4 +1,4 @@
-package io.github.nelsoncrosby.gridrace
+package io.github.nelsoncrosby.gprg
 
 /**
  *
@@ -8,5 +8,5 @@ class CONST {
     static final int RIGHT_BUTTON = 1
     static final int MIDDLE_BUTTON = 2
 
-    static final String TITLE = "GridRace"
+    static final String TITLE = 'Graph Paper Race Game'
 }

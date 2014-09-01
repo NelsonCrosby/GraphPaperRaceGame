@@ -1,13 +1,13 @@
-package io.github.nelsoncrosby.gridrace
+package io.github.nelsoncrosby.gprg
 
 import org.newdawn.slick.*
 
 /**
  *
  */
-class GridRace extends BasicGame {
+class GPRGame extends BasicGame {
 
-    GridRace() {
+    GPRGame() {
         super(CONST.TITLE)
     }
 
@@ -31,7 +31,12 @@ class GridRace extends BasicGame {
      * @param args Command-line arguments
      */
     static void main(String[] args) {
-        AppGameContainer appgc = new AppGameContainer(new GridRace())
+        // Stops your system yelling if game controllers aren't found
+        Input.disableControllers()
+
+        // Initialize the game
+        // May throw SlickException
+        AppGameContainer appgc = new AppGameContainer(new GPRGame())
         appgc.setDisplayMode(640, 480, false)
         appgc.start()
     }

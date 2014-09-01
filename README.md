@@ -1,22 +1,22 @@
-# GridRace #
+# Graph Paper Race Game #
 [Trello]
 
-GridRace is based off of a game traditionally played on grid paper. A track is
+GPRG is based off of a game traditionally played on grid paper. A track is
  drawn on a grid. A starting line is determined, and a number of 'vehicles' are
  drawn at this line. Vehicles move in turn. Each turn, a vehicle may accelerate
  or decelerate by -1, 0 or 1 M/s ([Manhattan-units] per second), on each axis
  independently. The goal is to be the first to the finish line (which may also
  be the starting line in a circuit).
 
-[Trello]: https://trello.com/b/hrNlfIF5/gridrace
+[Trello]: https://trello.com/b/hrNlfIF5/graph-paper-race-game
 [Manhattan-units]: http://en.wikipedia.org/wiki/Taxicab_geometry
 
 
 ## Project ##
 
 This game will initially be implemented in Groovy using [Slick2D] 1.0.1. There
- is an official [Trello] board. Official IRC is [EsperNet]#gridrace (because
- why not).
+ is an official [Trello] board. Official IRC is [EsperNet]#gprg (because why
+ not).
 
 [Slick2D]: http://slick.ninjacave.com/
 [EsperNet]: http://webchat.esper.net/
@@ -56,7 +56,7 @@ It's gonna be this way, because Gradle prefers it like this. Also, it makes
 - Run one of the `${platform}Natives` tasks provided by Gradle, in order to get
     the appropriate set for your system (e.g. `$ gradle linuxNatives`)
 - Set the following in your run configurations:
-    - Main class: `io.github.nelsoncrosby.gridrace.GridRace`
+    - Main class: `io.github.nelsoncrosby.gprg.GPRGame`
     - VM Options: `-Djava.library.path=lib/natives-${platform}`
 
 
