@@ -1,19 +1,21 @@
 package io.github.nelsoncrosby.gprg
 
+import io.github.nelsoncrosby.gprg.track.Track
 import org.newdawn.slick.*
 
 /**
  *
  */
 class GPRGame extends BasicGame {
-
+    Track track
     GPRGame() {
         super(CONST.TITLE)
     }
 
     @Override
     void init(GameContainer gc) throws SlickException {
-
+        gc.showFPS = false
+        track = new Track(Track.getResourceAsStream('test1.track'))
     }
 
     @Override
@@ -23,7 +25,7 @@ class GPRGame extends BasicGame {
 
     @Override
     void render(GameContainer gc, Graphics gx) throws SlickException {
-
+        track.render(gx)
     }
 
     /**
