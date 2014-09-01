@@ -34,8 +34,6 @@ This game will initially be implemented in Groovy using [Slick2D] 1.0.1. There
     built-in compiler can interpret Gradle dependencies, then it should be able
     to compile without any extra configuration.
 - Gradle must be used for resolving dependencies (including natives).
-- If your commit is related to a Trello card, the second line should be in the
-    format `[List/Card]`. This makes for easy reference.
 
 
 ### Directory structure ###
