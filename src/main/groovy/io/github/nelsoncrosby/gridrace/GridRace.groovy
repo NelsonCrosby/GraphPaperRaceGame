@@ -32,7 +32,6 @@ class GridRace extends BasicGame {
      * @param args Command-line arguments
      */
     static void main(String[] args) {
-        println System.getProperty('java.library.path')
         AppGameContainer appgc = new AppGameContainer(new GridRace())
         appgc.setDisplayMode(640, 480, false)
         appgc.start()
