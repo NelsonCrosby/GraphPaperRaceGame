@@ -6,6 +6,7 @@ import org.newdawn.slick.*
  *
  */
 class GridRace extends BasicGame {
+    boolean x = true
 
     GridRace() {
         super((String) CONST['title'])
@@ -18,12 +19,12 @@ class GridRace extends BasicGame {
 
     @Override
     void update(GameContainer gc, int delta) throws SlickException {
-        print 'update\r'
+
     }
 
     @Override
     void render(GameContainer gc, Graphics gx) throws SlickException {
-        print 'render\r'
+
     }
 
     /**
@@ -31,6 +32,7 @@ class GridRace extends BasicGame {
      * @param args Command-line arguments
      */
     static void main(String[] args) {
+        println System.getProperty('java.library.path')
         AppGameContainer appgc = new AppGameContainer(new GridRace())
         appgc.setDisplayMode(640, 480, false)
         appgc.start()
