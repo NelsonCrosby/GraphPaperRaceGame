@@ -17,7 +17,7 @@ class GPRGame extends BasicGame {
 
     @Override
     void init(GameContainer gc) throws SlickException {
-        gc.showFPS = false
+        gc.showFPS = true
         input = new Input(gc.getHeight())
         track = new Track(Track.getResourceAsStream('test1.track'))
         float aspectRatio = gc.getWidth() / gc.getHeight()
@@ -26,15 +26,15 @@ class GPRGame extends BasicGame {
 
     @Override
     void update(GameContainer gc, int delta) throws SlickException {
-        if (input.isKeyDown(Input.KEY_W)) {camera.moveY(CONST.DOWN)}
-        if (input.isKeyDown(Input.KEY_S)) {camera.moveY(CONST.UP)}
-        if (input.isKeyDown(Input.KEY_A)) {camera.moveX(CONST.LEFT)}
-        if (input.isKeyDown(Input.KEY_D)) {camera.moveX(CONST.RIGHT)}
+        if (input.isKeyDown(Input.KEY_W)) {camera.moveY(CONST.DOWN, delta)}
+        if (input.isKeyDown(Input.KEY_S)) {camera.moveY(CONST.UP, delta)}
+        if (input.isKeyDown(Input.KEY_A)) {camera.moveX(CONST.LEFT, delta)}
+        if (input.isKeyDown(Input.KEY_D)) {camera.moveX(CONST.RIGHT, delta)}
     }
 
     @Override
     void render(GameContainer gc, Graphics gx) throws SlickException {
-        track.render(gx)
+        camera.render(gx)
     }
 
     /**
@@ -48,7 +48,7 @@ class GPRGame extends BasicGame {
         // Initialize the game
         // May throw SlickException
         AppGameContainer appgc = new AppGameContainer(new GPRGame())
-        appgc.setDisplayMode(640, 480, false)
+        appgc.setDisplayMode(960, 720, false)
         appgc.start()
     }
 }

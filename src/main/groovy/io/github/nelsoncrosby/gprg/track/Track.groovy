@@ -22,13 +22,13 @@ class Track {
     Track(InputStream istream) {
         List<String> lines = istream.readLines()
         // Populate grid with characters
-        grid = new char[lines.size()][lines[0].size()]
+        grid = new char[lines[0].size()][lines.size()]
         width = grid.length
         height = grid[0].length
 
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                grid[i][j] = lines[i].charAt(j)
+        for (y in 0..height-1) {
+            for (x in 0..width-1) {
+                grid[x][y] = lines[y].charAt(x)
             }
         }
     }
@@ -63,12 +63,34 @@ class Track {
         int width = x2-x1
         int height = y2-y1
 
-        char[][] returnGrid = new char[width][height]
-        for (int x = x1; x < x2; x++) {
-            for (int y = y1; y < y2; y++) {
-                returnGrid[x][y] = grid[x][y]
+        // Must -1 a lot because of zero-based arrays
+        char[][] returnGrid = new char[width+1][height+1]
+        int gridX
+        int gridY
+        for (x in 0..width) {
+            for (y in 0..height) {
+                gridX = x+x1
+                gridY = y+y1
+                returnGrid[x][y] = grid[gridX-1][gridY-1]
             }
         }
         return returnGrid
+    }
+
+    void printGrid() {
+        // First transpose grid for printing
+        char[][] newGrid = new char[height][width]
+        for (x in 0..width-1) {
+            for (y in 0..height-1) {
+                newGrid[y][x] = grid[x][y]
+            }
+        }
+        // Now go through each row, printing it
+        for (row in newGrid) {
+            for (c in row) {
+                print(c)
+            }
+            print('\n')
+        }
     }
 }
