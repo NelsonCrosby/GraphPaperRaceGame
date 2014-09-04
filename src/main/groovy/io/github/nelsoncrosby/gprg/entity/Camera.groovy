@@ -35,8 +35,8 @@ class Camera {
     }
 
     // Rendering code
-    Color black = new Color(100, 100, 0)
-    Color white = new Color(255, 255, 255)
+    Color offTrack = new Color(100, 100, 0)
+    Color onTrack = new Color(255, 255, 255)
     void render(Graphics gx) {
         renderTrack(gx)
     }
@@ -55,10 +55,10 @@ class Camera {
                 // Get colour with which to draw colour
                 switch (cell) {
                     case Track.OUT_OF_BOUNDS:
-                        gx.color = black
+                        gx.color = offTrack
                         break
                     case Track.ON_TRACK:
-                        gx.color = white
+                        gx.color = onTrack
                         break
                 }
                 drawX = (x * currentTrack.CELL_WIDTH) - cameraX + halfWidth
