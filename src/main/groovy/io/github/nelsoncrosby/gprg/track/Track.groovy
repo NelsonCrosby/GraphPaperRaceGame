@@ -9,7 +9,7 @@ import org.newdawn.slick.Graphics
 class Track {
     static final char OUT_OF_BOUNDS = 'X',
                       ON_TRACK = ' '
-    static final int CELL_WIDTH = 32;
+    static final int CELL_WIDTH = 20;
     char[][] grid
 
     // Track properties
@@ -54,12 +54,14 @@ class Track {
             }
         }
     }
-
+    /**
+     * This method culls tiles, returning all tiles visible in
+     * viewport defined by corner arguments.  This is to optimise later, if necessary,
+     * or for the minimap.
+     * Ensure calling method does not attempt to access
+     * coordinates off the grid, or IndexOutOfRangeExceptions will occur.
+     */
     char[][] getTilesInView(int x1, int y1, int x2, int y2) {
-        /**
-         * Ensure calling method does not attempt to access
-         * coordinates off the grid, or IndexExceptions will happen.
-         */
         int width = x2-x1
         int height = y2-y1
 
@@ -78,7 +80,12 @@ class Track {
     }
 
     void printGrid() {
-        // First transpose grid for printing
+        /**
+         * Method basically prints the grid in the form it is in
+         * in the .txt file.  Really only useful for testing culling.
+         * Doesn't work at the moment, only prints full map.
+         */
+        // First transpose grid (swap coordinates) for printing
         char[][] newGrid = new char[height][width]
         for (x in 0..width-1) {
             for (y in 0..height-1) {
