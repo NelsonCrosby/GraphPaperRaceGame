@@ -2,6 +2,7 @@ package io.github.nelsoncrosby.gprg.track
 
 import org.newdawn.slick.Color
 import org.newdawn.slick.Graphics
+import org.newdawn.slick.geom.Vector2f
 
 /**
  *
@@ -13,8 +14,7 @@ class Track {
     char[][] grid
 
     // Track properties
-    int width
-    int height
+    Vector2f size
 
     Track(File file) {
         this(new FileInputStream(file))
@@ -23,11 +23,10 @@ class Track {
         List<String> lines = istream.readLines()
         // Populate grid with characters
         grid = new char[lines[0].size()][lines.size()]
-        width = grid.length
-        height = grid[0].length
+        size = new Vector2f(grid.length, grid[0].length)
 
-        for (y in 0..height-1) {
-            for (x in 0..width-1) {
+        for (y in 0..size.y-1) {
+            for (x in 0..size.x-1) {
                 grid[x][y] = lines[y].charAt(x)
             }
         }
@@ -62,15 +61,14 @@ class Track {
      * coordinates off the grid, or IndexOutOfRangeExceptions will occur.
      */
     char[][] getTilesInView(int x1, int y1, int x2, int y2) {
-        int width = x2-x1
-        int height = y2-y1
+        Vector2f size = new Vector2f(x2-x1, y2-y1)
 
         // Must -1 a lot because of zero-based arrays
-        char[][] returnGrid = new char[width+1][height+1]
+        char[][] returnGrid = new char[size.x+1][size.y+1]
         int gridX
         int gridY
-        for (x in 0..width) {
-            for (y in 0..height) {
+        for (x in 0..size.x) {
+            for (y in 0..size.y) {
                 gridX = x+x1
                 gridY = y+y1
                 returnGrid[x][y] = grid[gridX-1][gridY-1]
@@ -86,9 +84,9 @@ class Track {
          * Doesn't work at the moment, only prints full map.
          */
         // First transpose grid (swap coordinates) for printing
-        char[][] newGrid = new char[height][width]
-        for (x in 0..width-1) {
-            for (y in 0..height-1) {
+        char[][] newGrid = new char[size.y][size.x]
+        for (x in 0..size.x-1) {
+            for (y in 0..size.y-1) {
                 newGrid[y][x] = grid[x][y]
             }
         }

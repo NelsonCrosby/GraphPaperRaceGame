@@ -26,10 +26,10 @@ class GPRGame extends BasicGame {
 
     @Override
     void update(GameContainer gc, int delta) throws SlickException {
-        if (input.isKeyDown(Input.KEY_W)) {camera.moveY(CONST.DOWN, delta)}
-        if (input.isKeyDown(Input.KEY_S)) {camera.moveY(CONST.UP, delta)}
-        if (input.isKeyDown(Input.KEY_A)) {camera.moveX(CONST.LEFT, delta)}
-        if (input.isKeyDown(Input.KEY_D)) {camera.moveX(CONST.RIGHT, delta)}
+        if (input.isKeyDown(Input.KEY_W)) camera.moveY(CONST.DOWN, delta)
+        if (input.isKeyDown(Input.KEY_S)) camera.moveY(CONST.UP, delta)
+        if (input.isKeyDown(Input.KEY_A)) camera.moveX(CONST.LEFT, delta)
+        if (input.isKeyDown(Input.KEY_D)) camera.moveX(CONST.RIGHT, delta)
     }
 
     @Override

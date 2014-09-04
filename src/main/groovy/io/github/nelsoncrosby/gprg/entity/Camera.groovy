@@ -4,6 +4,7 @@ import io.github.nelsoncrosby.gprg.track.Track
 import org.newdawn.slick.Color
 import org.newdawn.slick.GameContainer
 import org.newdawn.slick.Graphics
+import org.newdawn.slick.geom.Vector2f
 
 /**
  * Created by rileysteyn on 1/09/14.
@@ -11,27 +12,26 @@ import org.newdawn.slick.Graphics
 class Camera {
     // Hold essential view variables
     static final int FOV = 45 // Degrees in Field-Of-View
-    float aspectRatio // Fairly self-explanatory
+    float aspectRatio
 
     // Hold positions of camera in world space
-    float cameraX = 160
-    float cameraY = 160
+    Vector2f cameraPos = new Vector2f(160, 160)
 
     float cameraSpeed = 1
 
     // Pre-calculated view variables
-    float halfWidth // Half the width of the window
-    float halfHeight // Half the height of the window
+    Vector2f halfSize
 
     // Holds current game instance variables
     Track currentTrack
 
-    // Constructor
-    Camera(GameContainer gc, Track track, float ar){
+    Camera(GameContainer gc, Track track, float ar) {
         currentTrack = track
         aspectRatio = ar
-        halfWidth = Math.ceil(gc.getWidth() / 2)
-        halfHeight = Math.ceil(gc.getHeight() / 2)
+        halfSize = new Vector2f(
+                (float) Math.ceil(gc.getWidth() / 2),
+                (float) Math.ceil(gc.getHeight() / 2)
+        )
     }
 
     // Rendering code
@@ -48,7 +48,7 @@ class Camera {
         int drawY
         char[] column
         // -1 for zero-based again
-        for (x in 0..currentTrack.width-1) {
+        for (x in 0..currentTrack.size.x-1) {
             column = currentTrack.grid[x]
             for (y in 0..column.length-1) {
                 char cell = column[y]
@@ -61,18 +61,21 @@ class Camera {
                         gx.color = onTrack
                         break
                 }
-                drawX = (x * currentTrack.CELL_WIDTH) - cameraX + halfWidth
-                drawY = (y * currentTrack.CELL_WIDTH) - cameraY + halfHeight
-                gx.fillRect(drawX, drawY, currentTrack.CELL_WIDTH, currentTrack.CELL_WIDTH)
+                drawX = (x * currentTrack.CELL_WIDTH) -
+                        cameraPos.x + halfSize.x
+                drawY = (y * currentTrack.CELL_WIDTH) -
+                        cameraPos.y + halfSize.y
+                gx.fillRect(drawX, drawY,
+                        currentTrack.CELL_WIDTH, currentTrack.CELL_WIDTH)
             }
         }
     }
 
     // Movement methods
     void moveX(int direction, float dt) {
-        cameraX += (direction * cameraSpeed * dt)
+        cameraPos.x += (direction * cameraSpeed * dt)
     }
     void moveY(int direction, float dt) {
-        cameraY -= (direction * cameraSpeed * dt)
+        cameraPos.y -= (direction * cameraSpeed * dt)
     }
 }
