@@ -1,5 +1,7 @@
 package io.github.nelsoncrosby.gprg.track
 
+import io.github.nelsoncrosby.gprg.entity.Camera
+import io.github.nelsoncrosby.gprg.entity.Entity
 import org.newdawn.slick.Color
 import org.newdawn.slick.Graphics
 import org.newdawn.slick.geom.Vector2f
@@ -7,10 +9,10 @@ import org.newdawn.slick.geom.Vector2f
 /**
  *
  */
-class Track {
+class Track{
     static final char OUT_OF_BOUNDS = 'X',
                       ON_TRACK = ' '
-    static final int CELL_WIDTH = 20;
+    static final int CELL_WIDTH = 12;
     char[][] grid
 
     // Track properties
@@ -32,27 +34,33 @@ class Track {
         }
     }
 
-    Color black = new Color(0, 0, 0)
-    Color white = new Color(255, 255, 255)
-    void render(Graphics gx) {
-        // Actually draw the thing
-        for (int y = 0; y < grid.length; y++) {
-            char[] row = grid[y]
-            for (int x = 0; x < row.length; x++) {
-                char cell = row[x]
+    Color offTrack = new Color(0, 100, 0)
+    Color onTrack = new Color(255, 255, 255)
+    void render(Graphics gx, Camera camera) {
+        int drawX
+        int drawY
+        char[] column
+        // -1 for zero-based again
+        for (x in 0..size.x-1) {
+            column = grid[x]
+            for (y in 0..column.length-1) {
+                char cell = column[y]
                 // Get colour with which to draw colour
                 switch (cell) {
                     case OUT_OF_BOUNDS:
-                        gx.color = black
+                        gx.color = offTrack
                         break
                     case ON_TRACK:
-                        gx.color = white
+                        gx.color = onTrack
                         break
                 }
-                gx.fillRect(x*CELL_WIDTH, y*CELL_WIDTH, CELL_WIDTH, CELL_WIDTH)
+                drawX = (x*CELL_WIDTH) - camera.position.x + camera.halfSize.x
+                drawY = (y*CELL_WIDTH) - camera.position.y + camera.halfSize.y
+                gx.fillRect(drawX, drawY, CELL_WIDTH, CELL_WIDTH)
             }
         }
     }
+
     /**
      * This method culls tiles, returning all tiles visible in
      * viewport defined by corner arguments.  This is to optimise later, if necessary,
@@ -60,8 +68,8 @@ class Track {
      * Ensure calling method does not attempt to access
      * coordinates off the grid, or IndexOutOfRangeExceptions will occur.
      */
-    char[][] getTilesInView(int x1, int y1, int x2, int y2) {
-        Vector2f size = new Vector2f(x2-x1, y2-y1)
+    char[][] getTilesInView(Camera camera) {
+        Vector2f size = camera.halfSize * 2
 
         // Must -1 a lot because of zero-based arrays
         char[][] returnGrid = new char[size.x+1][size.y+1]
@@ -69,8 +77,8 @@ class Track {
         int gridY
         for (x in 0..size.x) {
             for (y in 0..size.y) {
-                gridX = x+x1
-                gridY = y+y1
+                gridX = x + camera.position.x - camera.halfSize.x
+                gridY = y + camera.position.y - camera.halfSize.y
                 returnGrid[x][y] = grid[gridX-1][gridY-1]
             }
         }

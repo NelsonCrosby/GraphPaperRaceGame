@@ -21,7 +21,7 @@ class GPRGame extends BasicGame {
         input = new Input(gc.getHeight())
         track = new Track(Track.getResourceAsStream('test1.track'))
         float aspectRatio = gc.getWidth() / gc.getHeight()
-        camera = new Camera(gc, track, aspectRatio)
+        camera = new Camera(gc)
     }
 
     @Override
@@ -34,7 +34,7 @@ class GPRGame extends BasicGame {
 
     @Override
     void render(GameContainer gc, Graphics gx) throws SlickException {
-        camera.render(gx)
+        track.render(gx, camera)
     }
 
     /**
