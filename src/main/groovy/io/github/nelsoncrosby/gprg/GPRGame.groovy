@@ -8,6 +8,8 @@ import org.newdawn.slick.*
  *
  */
 class GPRGame extends BasicGame {
+    private Closure exit
+
     BoundInput input
     Camera camera
     Track track
@@ -17,6 +19,8 @@ class GPRGame extends BasicGame {
 
     @Override
     void init(GameContainer gc) throws SlickException {
+        exit = gc.&exit
+
         gc.showFPS = true
         track = new Track(Track.getResourceAsStream('test1.track'))
         camera = new Camera(gc)
@@ -37,6 +41,11 @@ class GPRGame extends BasicGame {
     @Override
     void render(GameContainer gc, Graphics gx) throws SlickException {
         track.render(gx, camera)
+    }
+
+    @Override
+    void keyPressed(int key, char c) {
+        if (key == Input.KEY_END) exit()
     }
 
     /**
