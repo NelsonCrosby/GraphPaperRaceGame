@@ -19,7 +19,6 @@ class GPRGame extends BasicGame {
     void init(GameContainer gc) throws SlickException {
         gc.showFPS = true
         track = new Track(Track.getResourceAsStream('test1.track'))
-        float aspectRatio = gc.getWidth() / gc.getHeight()
         camera = new Camera(gc)
 
         input = new BoundInput(new Input(gc.height), [

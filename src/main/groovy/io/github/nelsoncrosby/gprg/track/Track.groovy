@@ -1,7 +1,6 @@
 package io.github.nelsoncrosby.gprg.track
 
 import io.github.nelsoncrosby.gprg.entity.Camera
-import io.github.nelsoncrosby.gprg.entity.Entity
 import org.newdawn.slick.Color
 import org.newdawn.slick.Graphics
 import org.newdawn.slick.geom.Vector2f
@@ -9,6 +8,8 @@ import org.newdawn.slick.geom.Vector2f
 /**
  *
  */
+// There's some weird warnings coming out of here that make no sense.
+@SuppressWarnings("GroovyAssignabilityCheck")
 class Track{
     static final char OUT_OF_BOUNDS = 'X',
                       ON_TRACK = ' '
