@@ -1,4 +1,5 @@
 # Graph Paper Race Game #
+[![Build Status](https://travis-ci.org/NelsonCrosby/GraphPaperRaceGame.svg?branch=master)](https://travis-ci.org/NelsonCrosby/GraphPaperRaceGame)
 [Trello]
 
 GPRG is based off of a game traditionally played on grid paper. A track is
