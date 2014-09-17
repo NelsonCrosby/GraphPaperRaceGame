@@ -13,6 +13,7 @@ class GPRGame extends BasicGame {
     BoundInput input
     Camera camera
     Track track
+
     GPRGame() {
         super(CONST.TITLE)
     }
