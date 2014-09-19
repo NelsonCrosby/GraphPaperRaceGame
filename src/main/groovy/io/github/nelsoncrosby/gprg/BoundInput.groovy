@@ -1,5 +1,6 @@
 package io.github.nelsoncrosby.gprg
 
+import groovy.util.logging.Log
 import org.newdawn.slick.Input
 
 /**
@@ -7,6 +8,7 @@ import org.newdawn.slick.Input
  *
  * @author Nelson Crosby (github/NelsonCrosby)
  */
+@Log
 class BoundInput {
     private Input input
     private Map<Integer, Closure> keyBindings
@@ -25,6 +27,7 @@ class BoundInput {
         bindProp.load(getClass().getResourceAsStream('bindings.properties'))
 
         for (String action : bindProp.stringPropertyNames()) {
+            log.config "Keybind $action for ${bindProp[action]}"
             int key = Input[bindProp[action] as String] as int
             keyBindings[key] = actions[action]
         }
