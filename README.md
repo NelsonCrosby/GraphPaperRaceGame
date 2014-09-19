@@ -35,6 +35,9 @@ This game will initially be implemented in Groovy using [Slick2D] 1.0.1. There
     built-in compiler can interpret Gradle dependencies, then it should be able
     to compile without any extra configuration.
 - Gradle must be used for resolving dependencies (including natives).
+- Doc-comment (`/** */`) everything.
+    - Add an `@author` to any method or class you have contributed to.
+        - Do not add an `@author` to any abstract or empty methods.
 
 
 ### Directory structure ###
@@ -48,7 +51,10 @@ It's gonna be this way, because Gradle prefers it like this. Also, it makes
 - `src/test/groovy`: all tests written in Groovy
 - `src/test/java`: you can guess
 - `src/test/resources`: extras that end up in the jar, only visible to test 
-   sources.
+    sources.
+- `build/`: Anything that Gradle has created
+- `bulid/docs/groovydoc`: OF NOTE - HTML form of documentation ends up here
+    (after running `gradle groovydoc`).
 
 
 ### IDE setup ###
