@@ -4,14 +4,29 @@ import org.newdawn.slick.GameContainer
 import org.newdawn.slick.geom.Vector2f
 
 /**
- * Created by rileysteyn on 1/09/14.
+ * Allows for relative positioning
+ *
+ * @author Riley Steyn (github/RSteyn)
  */
 class Camera {
-    // Hold positions of camera in world space
+    /**
+     * Hold positions of camera in world space
+     */
     Vector2f position = new Vector2f(0, 0)
 
-    float cameraSpeed = 1
-    Vector2f halfSize  // Holds half the (width, height) of screen
+    private float cameraSpeed = 1
+    /**
+     * Holds half the (width, height) of screen
+     */
+    Vector2f halfSize
+
+    /**
+     * Construct the camera
+     *
+     * @param gc GameContainer context
+     *
+     * @author Riley Steyn
+     */
     Camera(GameContainer gc) {
         halfSize = new Vector2f(
                 (float) Math.ceil(gc.getWidth() / 2),
@@ -19,10 +34,25 @@ class Camera {
         )
     }
 
-    // Movement methods
+    /**
+     * Move camera along the <code>x</code> (horizontal) axis
+     *
+     * @param direction Direction (left/right) to move
+     * @param dt Distance to move
+     *
+     * @author Riley Steyn
+     */
     void moveX(int direction, float dt) {
         position.x += (direction * cameraSpeed * dt)
     }
+    /**
+     * Move camera along the <code>y</code> (vertical) axis
+     *
+     * @param direction Direction (up/down) to move
+     * @param dt Distance to move
+     *
+     * @author Riley Steyn
+     */
     void moveY(int direction, float dt) {
         position.y -= (direction * cameraSpeed * dt)
     }

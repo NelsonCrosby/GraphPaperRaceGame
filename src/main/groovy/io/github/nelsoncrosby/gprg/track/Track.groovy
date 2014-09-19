@@ -6,24 +6,59 @@ import org.newdawn.slick.Graphics
 import org.newdawn.slick.geom.Vector2f
 
 /**
+ * Track grid
  *
+ * @author Nelson Crosby (github/NelsonCrosby)
+ * @author Riley Steyn (github/RSteyn)
  */
 // There's some weird warnings coming out of here that make no sense.
-@SuppressWarnings("GroovyAssignabilityCheck")
-class Track{
+@SuppressWarnings(["GroovyAssignabilityCheck", "GrUnresolvedAccess"])
+class Track {
+    /**
+     * Characters used in track files
+     */
     static final char OUT_OF_BOUNDS = 'X',
                       ON_TRACK = ' '
+    /**
+     * The width of each cell on the screen (px)
+     */
     static final int CELL_WIDTH = 12;
-    char[][] grid
 
     // Track properties
+    char[][] grid
     Vector2f size
 
+    /**
+     * Convenience constructor for reading from a file.
+     *
+     * @param file The file to open
+     *
+     * @author Nelson Crosby
+     */
     Track(File file) {
-        this(new FileInputStream(file))
+        this(new FileReader(file))
     }
+    /**
+     * Convenience constructor for reading from an InputStream.
+     *
+     * @param istream The InputStream to read from
+     *
+     * @author Nelson Crosby
+     */
     Track(InputStream istream) {
-        List<String> lines = istream.readLines()
+        this(new InputStreamReader(istream))
+    }
+    /**
+     * Read a track from a Reader.
+     * Each new character is a new cell, and each row is separated by a
+     *  new-line.
+     *
+     * @param input Where to read from
+     *
+     * @author Nelson Crosby
+     */
+    Track(Reader input) {
+        List<String> lines = input.readLines()
         // Populate grid with characters
         grid = new char[lines[0].size()][lines.size()]
         size = new Vector2f(grid.length, grid[0].length)
@@ -37,6 +72,14 @@ class Track{
 
     Color offTrack = new Color(0, 100, 0)
     Color onTrack = new Color(255, 255, 255)
+    /**
+     * Draw the track on the screen.
+     *
+     * @param gx Graphics context to draw to
+     * @param camera Camera context to determine relative positions
+     *
+     * @author Riley Steyn
+     */
     void render(Graphics gx, Camera camera) {
         int drawX
         int drawY
@@ -68,6 +111,10 @@ class Track{
      * or for the minimap.
      * Ensure calling method does not attempt to access
      * coordinates off the grid, or IndexOutOfRangeExceptions will occur.
+     *
+     * @param camera Camera context to determine relative positions
+     *
+     * @author Riley Steyn
      */
     char[][] getTilesInView(Camera camera) {
         Vector2f size = camera.halfSize * 2
@@ -86,12 +133,14 @@ class Track{
         return returnGrid
     }
 
+    /**
+     * Method basically prints the grid in the form it is in
+     * in the .txt file.  Really only useful for testing culling.
+     * Doesn't work at the moment, only prints full map.
+     *
+     * @author Riley Steyn
+     */
     void printGrid() {
-        /**
-         * Method basically prints the grid in the form it is in
-         * in the .txt file.  Really only useful for testing culling.
-         * Doesn't work at the moment, only prints full map.
-         */
         // First transpose grid (swap coordinates) for printing
         char[][] newGrid = new char[size.y][size.x]
         for (x in 0..size.x-1) {

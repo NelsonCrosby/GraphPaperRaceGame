@@ -1,7 +1,7 @@
 package io.github.nelsoncrosby.gprg
 
 /**
- *
+ * Game constants
  */
 class CONST {
     static final int LEFT_BUTTON = 0
