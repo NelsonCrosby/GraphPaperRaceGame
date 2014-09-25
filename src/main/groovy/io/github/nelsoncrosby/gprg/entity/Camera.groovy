@@ -9,15 +9,11 @@ import org.newdawn.slick.geom.Vector2f
  * @author Riley Steyn (github/RSteyn)
  */
 class Camera {
-    /**
-     * Hold positions of camera in world space
-     */
+    /** Hold positions of camera in world space */
     Vector2f position = new Vector2f(0, 0)
 
     private float cameraSpeed = 1
-    /**
-     * Holds half the (width, height) of screen
-     */
+    /** Holds half the (width, height) of screen */
     Vector2f halfSize
 
     /**
