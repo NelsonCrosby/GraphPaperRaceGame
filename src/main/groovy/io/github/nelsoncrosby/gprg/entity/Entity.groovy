@@ -9,66 +9,62 @@ import org.newdawn.slick.geom.Vector2f
  * @author Nelson Crosby (github/NelsonCrosby)
  */
 abstract class Entity {
-    Vector2f pos
+    /** Location on the grid */
+    int gridX, gridY
+    /** Size (in pixels) of each cell on the screen */
     int gridSize
 
     /**
+     * Construct to a position on the grid
+     *
      * @param gridSize Size (in pixels) of each cell on the screen
-     * @param pos Starting position for the entity
+     * @param startX Starting gridX position
+     * @param startY Starting gridY position
      *
      * @author Nelson Crosby
      */
-    Entity(int gridSize = 1, Vector2f pos = new Vector2f(0f, 0f)) {
+    Entity(int gridSize = 1, int startX = 0, int startY = 0) {
         this.gridSize = gridSize
-        this.pos = pos
+        this.gridX = startX
+        this.gridY = startY
     }
 
     /**
-     * X position on the grid
-     * Getter for <code>gridX</code>
+     * Construct to a position on the map
      *
-     * @return <code>gridX</code>
+     * @param gridSize Size (in pixels) of each cell on the screen
+     * @param startPos Starting map position
      *
      * @author Nelson Crosby
      */
-    int getGridX() {
-        return pos.x / gridSize
+    Entity(int gridSize, Vector2f startPos) {
+        this.gridSize = gridSize
+        this.pos = startPos
     }
 
     /**
-     * Y position on the grid
-     * Getter for <code>gridY</code>
+     * Pixel-based position on the map
+     * Getter for <code>pos</code>
      *
-     * @return <code>gridY</code>
+     * @return <code>pos</pos>
      *
      * @author Nelson Crosby
      */
-    int getGridY() {
-        return pos.y / gridSize
+    Vector2f getPos() {
+        return new Vector2f(gridX * gridSize, gridY * gridSize)
     }
 
     /**
-     * X position on the grid
-     * Setter for <code>gridX</code>
+     * Pixel-based position on the map
+     * Setter for <code>pos</code>
      *
-     * @param newX New <code>gridX</code>
-     *
-     * @author Nelson Crosby
-     */
-    void setGridX(int newX) {
-        pos.x = newX * gridSize
-    }
-
-    /**
-     * Y position on the grid
-     * Setter for <code>gridY</code>
-     *
-     * @param newY New <code>gridY</code>
+     * @param newPos New <code>pos</code>
      *
      * @author Nelson Crosby
      */
-    void setGridY(int newY) {
-        pos.y = newY * gridSize
+    void setPos(Vector2f newPos) {
+        gridX = newPos.x / gridSize
+        gridY = newPos.y / gridSize
     }
 
     /**

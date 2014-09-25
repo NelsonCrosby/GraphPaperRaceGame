@@ -135,7 +135,9 @@ class GPRGame extends BasicGame {
         log.info 'Quit on system request'
         return true
     }
-/**
+
+
+    /**
      * Entry point.
      *
      * @param args Command-line arguments
