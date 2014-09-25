@@ -7,6 +7,7 @@ import org.newdawn.slick.geom.Vector2f
  * Allows for relative positioning
  *
  * @author Riley Steyn (github/RSteyn)
+ * @author Nelson Crosby (github/NelsonCrosby)
  */
 class Camera {
     /** Hold positions of camera in world space */
@@ -41,6 +42,7 @@ class Camera {
     void moveX(int direction, float dt) {
         position.x += (direction * cameraSpeed * dt)
     }
+
     /**
      * Move camera along the <code>y</code> (vertical) axis
      *
@@ -51,5 +53,20 @@ class Camera {
      */
     void moveY(int direction, float dt) {
         position.y -= (direction * cameraSpeed * dt)
+    }
+
+    /**
+     * Get the position on the screen for any given position in the world
+     *
+     * @param fieldPos Position in world
+     * @return Position on screen
+     *
+     * @author Nelson Crosby
+     */
+    Vector2f getScreenPos(Vector2f fieldPos) {
+        return new Vector2f(
+                fieldPos.x + position.x as float,
+                fieldPos.y + position.y as float
+        )
     }
 }

@@ -32,10 +32,7 @@ abstract class Entity {
      * @author Nelson Crosby
      */
     void render(Graphics gx, Camera camera) {
-        Vector2f screenPos = pos.copy()
-        screenPos.x += camera.position.x
-        screenPos.y += camera.position.y
-        render(gx, screenPos)
+        render(gx, camera.getScreenPos(pos))
     }
 
     /**
