@@ -2,6 +2,7 @@ package io.github.nelsoncrosby.gprg
 
 import groovy.util.logging.Log
 import io.github.nelsoncrosby.gprg.entity.Camera
+import io.github.nelsoncrosby.gprg.entity.Player
 import io.github.nelsoncrosby.gprg.track.Track
 import org.newdawn.slick.*
 
@@ -18,6 +19,8 @@ class GPRGame extends BasicGame {
     BoundInput input
     Camera camera
     Track track
+
+    Player player1
 
     /**
      * Construct the game and start it.
@@ -65,6 +68,8 @@ class GPRGame extends BasicGame {
         log.fine 'Constructing resources'
         track = new Track(Track.getResourceAsStream('test1.track'))
         camera = new Camera(gc)
+        player1 = new Player(Track.CELL_WIDTH, 10, 10)
+        player1.color = new Color(1.0f, 0, 0)
 
         log.finer 'Constructing input'
         input = new BoundInput(new Input(gc.height), [
@@ -89,6 +94,7 @@ class GPRGame extends BasicGame {
     @Override
     void update(GameContainer gc, int delta) throws SlickException {
         input.test(delta)
+        player1.update(delta)
     }
 
     /**
@@ -104,6 +110,7 @@ class GPRGame extends BasicGame {
     @Override
     void render(GameContainer gc, Graphics gx) throws SlickException {
         track.render(gx, camera)
+        player1.render(gx, camera)
     }
 
     /**

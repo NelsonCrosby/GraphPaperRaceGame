@@ -65,8 +65,8 @@ class Camera {
      */
     Vector2f getScreenPos(Vector2f fieldPos) {
         return new Vector2f(
-                fieldPos.x + position.x as float,
-                fieldPos.y + position.y as float
+                fieldPos.x - position.x as float,
+                fieldPos.y - position.y as float
         )
     }
 }
