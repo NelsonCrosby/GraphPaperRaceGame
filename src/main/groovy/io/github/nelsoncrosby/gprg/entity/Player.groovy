@@ -18,6 +18,14 @@ class Player extends Entity {
 
     }
 
+    void moveX(int direction) {
+        gridX += direction
+    }
+
+    void moveY(int direction) {
+        gridY -= direction
+    }
+
     /**
      * Render entity to the screen
      *
