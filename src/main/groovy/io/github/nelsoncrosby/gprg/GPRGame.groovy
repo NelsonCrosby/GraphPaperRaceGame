@@ -123,9 +123,23 @@ class GPRGame extends BasicGame {
      */
     @Override
     void keyPressed(int key, char c) {
-        if (key == Input.KEY_END) {
-            log.info 'Quit on KEY_END'
-            exit()
+        switch (key) {
+            case Input.KEY_END:
+                log.info 'Quit on KEY_END'
+                exit()
+                break
+            case Input.KEY_W:
+                player1.moveY(CONST.UP)
+                break
+            case Input.KEY_S:
+                player1.moveY(CONST.DOWN)
+                break
+            case Input.KEY_A:
+                player1.moveX(CONST.LEFT)
+                break
+            case Input.KEY_D:
+                player1.moveX(CONST.RIGHT)
+                break
         }
     }
 

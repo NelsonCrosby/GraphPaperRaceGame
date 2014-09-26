@@ -98,8 +98,8 @@ class Track {
                         gx.color = onTrack
                         break
                 }
-                drawX = (x*CELL_WIDTH) - camera.position.x + camera.halfSize.x
-                drawY = (y*CELL_WIDTH) - camera.position.y + camera.halfSize.y
+                drawX = (x*CELL_WIDTH) - camera.position.x
+                drawY = (y*CELL_WIDTH) - camera.position.y
                 gx.fillRect(drawX, drawY, CELL_WIDTH, CELL_WIDTH)
             }
         }
