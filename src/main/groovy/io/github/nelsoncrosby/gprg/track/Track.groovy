@@ -1,6 +1,7 @@
 package io.github.nelsoncrosby.gprg.track
 
 import io.github.nelsoncrosby.gprg.entity.Camera
+import io.github.nelsoncrosby.gprg.entity.Entity
 import org.newdawn.slick.Color
 import org.newdawn.slick.Graphics
 import org.newdawn.slick.geom.Vector2f
@@ -68,6 +69,13 @@ class Track {
                 grid[x][y] = lines[y].charAt(x)
             }
         }
+    }
+
+    boolean isOnTrack(Entity entity) {
+        return grid[entity.gridX][entity.gridY] == ON_TRACK &&
+                grid[entity.gridX][entity.gridY-1] == ON_TRACK &&
+                grid[entity.gridX-1][entity.gridY] == ON_TRACK &&
+                grid[entity.gridX-1][entity.gridY-1] == ON_TRACK
     }
 
     Color offTrack = new Color(0, 100, 0)

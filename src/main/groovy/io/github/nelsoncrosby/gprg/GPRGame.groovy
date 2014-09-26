@@ -69,7 +69,7 @@ class GPRGame extends BasicGame {
         track = new Track(Track.getResourceAsStream('test1.track'))
         camera = new Camera(gc)
         player1 = new Player(Track.CELL_WIDTH, 10, 10)
-        player1.color = new Color(1.0f, 0, 0)
+        player1.color = Color.blue
 
         log.finer 'Constructing input'
         input = new BoundInput(new Input(gc.height), [
@@ -110,6 +110,11 @@ class GPRGame extends BasicGame {
     @Override
     void render(GameContainer gc, Graphics gx) throws SlickException {
         track.render(gx, camera)
+
+        if (track.isOnTrack(player1))
+            player1.color = Color.blue
+        else
+            player1.color = Color.red
         player1.render(gx, camera)
     }
 
