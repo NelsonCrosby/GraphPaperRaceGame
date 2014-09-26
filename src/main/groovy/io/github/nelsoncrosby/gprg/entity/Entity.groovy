@@ -1,5 +1,6 @@
 package io.github.nelsoncrosby.gprg.entity
 
+import io.github.nelsoncrosby.gprg.track.Track
 import org.newdawn.slick.Graphics
 import org.newdawn.slick.geom.Vector2f
 
@@ -71,8 +72,9 @@ abstract class Entity {
      * Perform changes to the entity
      *
      * @param delta Milliseconds since last called
+     * @param track The currently active track
      */
-    abstract void update(int delta)
+    abstract void update(int delta, Track track)
 
     /**
      * Render entity to the screen

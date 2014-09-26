@@ -2,6 +2,7 @@ package io.github.nelsoncrosby.gprg
 
 import groovy.util.logging.Log
 import io.github.nelsoncrosby.gprg.entity.Camera
+import io.github.nelsoncrosby.gprg.entity.Entity
 import io.github.nelsoncrosby.gprg.entity.Player
 import io.github.nelsoncrosby.gprg.track.Track
 import org.newdawn.slick.*
@@ -19,8 +20,7 @@ class GPRGame extends BasicGame {
     BoundInput input
     Camera camera
     Track track
-
-    Player player1
+    List<Entity> entities
 
     /**
      * Construct the game and start it.
@@ -68,8 +68,7 @@ class GPRGame extends BasicGame {
         log.fine 'Constructing resources'
         track = new Track(Track.getResourceAsStream('test1.track'))
         camera = new Camera(gc)
-        player1 = new Player(Track.CELL_WIDTH, 10, 10)
-        player1.color = Color.blue
+        entities = [Player.getNext(track.CELL_WIDTH, 10, 10)]
 
         log.finer 'Constructing input'
         input = new BoundInput(gc.input, [
@@ -80,6 +79,18 @@ class GPRGame extends BasicGame {
         ])
 
         log.info 'Game started'
+    }
+
+    /**
+     * Get the current player
+     * Current player is the last in <code>this.entities</code>
+     *
+     * @return Currently active player
+     *
+     * @author Nelson Crosby
+     */
+    Player getCurrentPlayer() {
+        return entities.reverse().find { it instanceof Player } as Player
     }
 
     /**
@@ -94,7 +105,7 @@ class GPRGame extends BasicGame {
     @Override
     void update(GameContainer gc, int delta) throws SlickException {
         input.test(delta)
-        player1.update(delta)
+        entities.each { it.update(delta, track) }
     }
 
     /**
@@ -110,12 +121,7 @@ class GPRGame extends BasicGame {
     @Override
     void render(GameContainer gc, Graphics gx) throws SlickException {
         track.render(gx, camera)
-
-        if (track.isOnTrack(player1))
-            player1.color = Color.blue
-        else
-            player1.color = Color.red
-        player1.render(gx, camera)
+        entities.each { it.render(gx, camera) }
     }
 
     /**
@@ -134,16 +140,16 @@ class GPRGame extends BasicGame {
                 exit()
                 break
             case Input.KEY_W:
-                player1.moveY(CONST.UP)
+                currentPlayer.moveY(CONST.UP)
                 break
             case Input.KEY_S:
-                player1.moveY(CONST.DOWN)
+                currentPlayer.moveY(CONST.DOWN)
                 break
             case Input.KEY_A:
-                player1.moveX(CONST.LEFT)
+                currentPlayer.moveX(CONST.LEFT)
                 break
             case Input.KEY_D:
-                player1.moveX(CONST.RIGHT)
+                currentPlayer.moveX(CONST.RIGHT)
                 break
         }
     }
