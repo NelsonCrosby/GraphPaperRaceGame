@@ -72,7 +72,7 @@ class GPRGame extends BasicGame {
         player1.color = Color.blue
 
         log.finer 'Constructing input'
-        input = new BoundInput(new Input(gc.height), [
+        input = new BoundInput(gc.input, [
                 'camUp':    { int delta -> camera.moveY(CONST.UP,    delta) },
                 'camDown':  { int delta -> camera.moveY(CONST.DOWN,  delta) },
                 'camLeft':  { int delta -> camera.moveX(CONST.LEFT,  delta) },
