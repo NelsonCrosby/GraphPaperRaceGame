@@ -71,6 +71,15 @@ class Track {
         }
     }
 
+    /**
+     * Check if an entity is within the track bounds
+     *
+     * @param entity Entity to check
+     * @return <code>true</code> if all surrounding tiles are
+     *         <code>ON_TRACK</code>
+     *
+     * @author Nelson Crosby
+     */
     boolean isOnTrack(Entity entity) {
         return grid[entity.gridX][entity.gridY] == ON_TRACK &&
                 grid[entity.gridX][entity.gridY-1] == ON_TRACK &&
