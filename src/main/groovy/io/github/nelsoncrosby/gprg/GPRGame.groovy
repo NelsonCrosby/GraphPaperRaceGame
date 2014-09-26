@@ -16,6 +16,7 @@ import org.newdawn.slick.*
 @Log
 class GPRGame extends BasicGame {
     private Closure exit
+    private Closure<Player> getNextPlayer
 
     BoundInput input
     Camera camera
@@ -68,7 +69,9 @@ class GPRGame extends BasicGame {
         log.fine 'Constructing resources'
         track = new Track(Track.getResourceAsStream('test1.track'))
         camera = new Camera(gc)
-        entities = [Player.getNext(track.CELL_WIDTH, 10, 10)]
+        getNextPlayer = Player.&getNext.curry(track.CELL_WIDTH, 10, 10)
+
+        entities = [getNextPlayer()]
 
         log.finer 'Constructing input'
         input = new BoundInput(gc.input, [
@@ -150,6 +153,9 @@ class GPRGame extends BasicGame {
                 break
             case Input.KEY_D:
                 currentPlayer.moveX(CONST.RIGHT)
+                break
+            case Input.KEY_ENTER:
+                entities << getNextPlayer()
                 break
         }
     }

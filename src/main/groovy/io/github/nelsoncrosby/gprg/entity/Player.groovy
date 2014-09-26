@@ -75,6 +75,7 @@ class Player extends Entity {
         if (currentColor >= colorsCycle.size())
             currentColor = 0
         player.color = colorsCycle[currentColor]
+        currentColor++
 
         return player
     }
