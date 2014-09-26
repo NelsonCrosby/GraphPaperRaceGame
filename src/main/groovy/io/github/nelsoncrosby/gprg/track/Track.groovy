@@ -15,14 +15,10 @@ import org.newdawn.slick.geom.Vector2f
 // There's some weird warnings coming out of here that make no sense.
 @SuppressWarnings(["GroovyAssignabilityCheck", "GrUnresolvedAccess"])
 class Track {
-    /**
-     * Characters used in track files
-     */
+    /** Characters used in track files */
     static final char OUT_OF_BOUNDS = 'X',
                       ON_TRACK = ' '
-    /**
-     * The width of each cell on the screen (px)
-     */
+    /** The width of each cell on the screen (px) */
     static final int CELL_WIDTH = 12;
 
     // Track properties
@@ -123,9 +119,9 @@ class Track {
     }
 
     /**
-     * This method culls tiles, returning all tiles visible in
-     * viewport defined by corner arguments.  This is to optimise later, if necessary,
-     * or for the minimap.
+     * This method culls tiles, returning all tiles visible in viewport defined
+     * by corner arguments.  This is to optimise later, if necessary, or for
+     * the minimap.
      * Ensure calling method does not attempt to access
      * coordinates off the grid, or IndexOutOfRangeExceptions will occur.
      *
@@ -151,8 +147,8 @@ class Track {
     }
 
     /**
-     * Method basically prints the grid in the form it is in
-     * in the .txt file.  Really only useful for testing culling.
+     * Method basically prints the grid in the form it is in in the .txt file.
+     * Really only useful for testing culling.
      * Doesn't work at the moment, only prints full map.
      *
      * @author Riley Steyn

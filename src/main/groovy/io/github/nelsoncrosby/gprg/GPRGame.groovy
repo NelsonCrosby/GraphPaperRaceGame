@@ -73,10 +73,10 @@ class GPRGame extends BasicGame {
 
         log.finer 'Constructing input'
         input = new BoundInput(new Input(gc.height), [
-                'cameraUp':    { int delta -> camera.moveY(CONST.UP,    delta) },
-                'cameraDown':  { int delta -> camera.moveY(CONST.DOWN,  delta) },
-                'cameraLeft':  { int delta -> camera.moveX(CONST.LEFT,  delta) },
-                'cameraRight': { int delta -> camera.moveX(CONST.RIGHT, delta) }
+                'camUp':    { int delta -> camera.moveY(CONST.UP,    delta) },
+                'camDown':  { int delta -> camera.moveY(CONST.DOWN,  delta) },
+                'camLeft':  { int delta -> camera.moveX(CONST.LEFT,  delta) },
+                'camRight': { int delta -> camera.moveX(CONST.RIGHT, delta) }
         ])
 
         log.info 'Game started'
