@@ -10,8 +10,10 @@ import org.newdawn.slick.geom.Vector2f
  * @author Nelson Crosby (github/NelsonCrosby)
  */
 abstract class Entity {
-    /** Location on the grid */
-    int gridX, gridY
+    /** X position on the grid */
+    int gridX
+    /** Y position on the grid */
+    int gridY
     /** Size (in pixels) of each cell on the screen */
     int gridSize
 

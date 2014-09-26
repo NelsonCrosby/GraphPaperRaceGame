@@ -15,12 +15,18 @@ import org.newdawn.slick.*
  */
 @Log
 class GPRGame extends BasicGame {
+    /** Easy-call for exiting the game */
     private Closure exit
+    /** Easy-call for getting a new Player */
     private Closure<Player> getNextPlayer
 
+    /** Provides a slightly nicer input binding system */
     BoundInput input
+    /** Camera object controlling the screen */
     Camera camera
+    /** Currently active track */
     Track track
+    /** Active entities */
     List<Entity> entities
 
     /**
