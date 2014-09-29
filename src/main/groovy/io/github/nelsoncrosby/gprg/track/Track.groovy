@@ -77,9 +77,9 @@ class Track {
      * @author Nelson Crosby
      */
     boolean isOnTrack(Entity entity) {
-        return grid[entity.gridX][entity.gridY] == ON_TRACK &&
-                grid[entity.gridX][entity.gridY-1] == ON_TRACK &&
-                grid[entity.gridX-1][entity.gridY] == ON_TRACK &&
+        return grid[entity.gridX][entity.gridY] == ON_TRACK ||
+                grid[entity.gridX][entity.gridY-1] == ON_TRACK ||
+                grid[entity.gridX-1][entity.gridY] == ON_TRACK ||
                 grid[entity.gridX-1][entity.gridY-1] == ON_TRACK
     }
 
