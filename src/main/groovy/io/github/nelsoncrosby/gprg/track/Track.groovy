@@ -114,6 +114,8 @@ class Track {
                 drawX = (x*CELL_WIDTH) - camera.position.x
                 drawY = (y*CELL_WIDTH) - camera.position.y
                 gx.fillRect(drawX, drawY, CELL_WIDTH, CELL_WIDTH)
+                gx.color = Color.black
+                gx.drawRect(drawX, drawY, CELL_WIDTH, CELL_WIDTH)
             }
         }
     }
