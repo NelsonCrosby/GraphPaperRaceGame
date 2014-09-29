@@ -11,6 +11,8 @@ import org.newdawn.slick.geom.Vector2f
  * @author Nelson Crosby (github/NelsonCrosby)
  */
 class Player extends Entity {
+    /** The SIZE of the player when drawn */
+    static final int SIZE = 6
     /** The current draw colour of the player */
     Color color
     /** Determines how the player is drawn, and whether or not it can move */
@@ -79,17 +81,17 @@ class Player extends Entity {
     @Override
     void render(Graphics gx, Vector2f screenPos) {
         gx.color = color
-        float x1 = screenPos.x - 5
-        float x2 = screenPos.x + 5
-        float y1 = screenPos.y - 5
-        float y2 = screenPos.y + 5
+        float x1 = screenPos.x - SIZE
+        float x2 = screenPos.x + SIZE
+        float y1 = screenPos.y - SIZE
+        float y2 = screenPos.y + SIZE
         if (onTrack) {
-            // Draw a cross
-            gx.drawLine(x1, y1, x2, y2)         // Draw \ line
-            gx.drawLine(x2, y1, x1, y2)         // Swap x to draw / line
+            // Draw player as circle
+            gx.drawOval(x1, y1, SIZE*2, SIZE*2)
         } else {
-            // Crashed, draw a rectangle
-            gx.drawRect(x1, y1, 10, 10)
+            // Crashed, draw a cross
+            gx.drawLine(x1, y1, x2, y2)  // Draw \ line
+            gx.drawLine(x2, y1, x1, y2)  // Swap x to draw / line
         }
     }
 
