@@ -73,7 +73,7 @@ class GPRGame extends BasicGame {
         log.fine 'gc settings'
         gc.showFPS = true
         log.fine 'Constructing resources'
-        track = new Track(Track.getResourceAsStream('test1.track'))
+        track = new Track('test2')
         camera = new Camera(gc)
         getNextPlayer = Player.&getNext.curry(track.CELL_WIDTH, 10, 10)
 
