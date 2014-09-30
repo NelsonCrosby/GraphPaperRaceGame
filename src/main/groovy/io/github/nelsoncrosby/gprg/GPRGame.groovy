@@ -68,8 +68,6 @@ class GPRGame extends BasicGame {
      */
     @Override
     void init(GameContainer gc) throws SlickException {
-        exit = gc.&exit
-
         log.fine 'gc settings'
         gc.showFPS = true
         log.fine 'Constructing resources'
@@ -80,12 +78,20 @@ class GPRGame extends BasicGame {
         entities = [getNextPlayer()]
 
         log.finer 'Constructing input'
-        input = new BoundInput(gc.input, [
-                'camUp':    { int delta -> camera.moveY(CONST.UP,    delta) },
-                'camDown':  { int delta -> camera.moveY(CONST.DOWN,  delta) },
-                'camLeft':  { int delta -> camera.moveX(CONST.LEFT,  delta) },
+        Map<String, Closure> pollBindings = [
+                'camUp'   : { int delta -> camera.moveY(CONST.UP, delta) },
+                'camDown' : { int delta -> camera.moveY(CONST.DOWN, delta) },
+                'camLeft' : { int delta -> camera.moveX(CONST.LEFT, delta) },
                 'camRight': { int delta -> camera.moveX(CONST.RIGHT, delta) }
-        ])
+        ]
+        Map<String, Closure> eventBindings = [
+                'quit'      : { log.info 'Quit on EVENT:quit'; gc.exit() },
+                'moveUp'    : { currentPlayer.moveY(CONST.UP) },
+                'moveDown'  : { currentPlayer.moveY(CONST.DOWN) },
+                'moveLeft'  : { currentPlayer.moveX(CONST.LEFT) },
+                'moveRight' : { currentPlayer.moveX(CONST.RIGHT) }
+        ]
+        input = new BoundInput(gc.input, pollBindings, eventBindings)
 
         log.info 'Game started'
     }
@@ -131,39 +137,6 @@ class GPRGame extends BasicGame {
     void render(GameContainer gc, Graphics gx) throws SlickException {
         track.render(gx, camera)
         entities.each { it.render(gx, camera) }
-    }
-
-    /**
-     * Handle event-based keyboard input
-     *
-     * @param key The key-code that has been pressed
-     * @param c Character that the key represents
-     *
-     * @author Nelson Crosby
-     */
-    @Override
-    void keyPressed(int key, char c) {
-        switch (key) {
-            case Input.KEY_END:
-                log.info 'Quit on KEY_END'
-                exit()
-                break
-            case Input.KEY_W:
-                currentPlayer.moveY(CONST.UP)
-                break
-            case Input.KEY_S:
-                currentPlayer.moveY(CONST.DOWN)
-                break
-            case Input.KEY_A:
-                currentPlayer.moveX(CONST.LEFT)
-                break
-            case Input.KEY_D:
-                currentPlayer.moveX(CONST.RIGHT)
-                break
-            case Input.KEY_ENTER:
-                entities << getNextPlayer()
-                break
-        }
     }
 
     /**
