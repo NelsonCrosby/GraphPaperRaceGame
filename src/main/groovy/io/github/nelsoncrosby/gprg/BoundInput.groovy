@@ -25,24 +25,25 @@ class BoundInput implements KeyListener {
                Map<String, Closure> pollActions,
                Map<String, Closure> eventActions) {
         this.input = input
-        input.addKeyListener(this)
 
         this.pollBindings = [:]
         this.eventBindings = [:]
         Properties bindProp = new Properties()
 
         String propertyName = 'io.github.nelsoncrosby.gprg.inputBindings'
-        if (System.hasProperty(propertyName))
-            bindProp.load(new FileReader(propertyName))
+        if (System.properties.containsKey(propertyName))
+            bindProp.load(new FileReader(
+                    System.properties[propertyName] as String
+            ))
         else
             bindProp.load(getClass().getResourceAsStream('input.properties'))
 
         for (String action : bindProp.stringPropertyNames()) {
             log.config "Keybind $action for ${bindProp[action]}"
             int key = Input[bindProp[action] as String] as int
-            if (pollActions.containsKey(key))
+            if (pollActions.containsKey(action))
                 pollBindings[key] = pollActions[action]
-            else if (eventActions.containsKey(key))
+            else if (eventActions.containsKey(action))
                 eventBindings[key] = eventActions[action]
         }
     }
@@ -71,7 +72,7 @@ class BoundInput implements KeyListener {
      */
     @Override
     void keyPressed(int key, char c) {
-        if (eventBindings.containsKey(key)) {
+        if (key in eventBindings.keySet()) {
             eventBindings[key]()
         }
     }

@@ -140,6 +140,14 @@ class GPRGame extends BasicGame {
     }
 
     /**
+     *
+     */
+    @Override
+    void keyPressed(int key, char c) {
+        input.keyPressed(key, c)
+    }
+
+    /**
      * Called when the system requests for the window to close.
      *
      * @return <code>true</code> when the window should be closed,
