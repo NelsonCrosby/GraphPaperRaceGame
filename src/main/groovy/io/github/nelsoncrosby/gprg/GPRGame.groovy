@@ -67,7 +67,7 @@ class GPRGame extends BasicGame {
         log.fine 'gc settings'
         gc.showFPS = true
         log.fine 'Constructing resources'
-        track = new Track('test2')
+        track = new Track('standard-oval')
         camera = new Camera(gc)
 
         entities = [nextPlayer]
