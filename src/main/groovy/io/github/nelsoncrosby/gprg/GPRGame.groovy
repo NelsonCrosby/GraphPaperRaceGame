@@ -6,6 +6,7 @@ import io.github.nelsoncrosby.gprg.entity.Entity
 import io.github.nelsoncrosby.gprg.entity.Player
 import io.github.nelsoncrosby.gprg.track.Track
 import org.newdawn.slick.*
+import org.newdawn.slick.geom.Vector2f
 
 /**
  * Root class for handling game creation and updating.
@@ -15,11 +16,6 @@ import org.newdawn.slick.*
  */
 @Log
 class GPRGame extends BasicGame {
-    /** Easy-call for exiting the game */
-    private Closure exit
-    /** Easy-call for getting a new Player */
-    private Closure<Player> getNextPlayer
-
     /** Provides a slightly nicer input binding system */
     BoundInput input
     /** Camera object controlling the screen */
@@ -73,9 +69,8 @@ class GPRGame extends BasicGame {
         log.fine 'Constructing resources'
         track = new Track('test2')
         camera = new Camera(gc)
-        getNextPlayer = Player.&getNext.curry(track.CELL_WIDTH, 10, 10)
 
-        entities = [getNextPlayer()]
+        entities = [nextPlayer]
 
         log.finer 'Constructing input'
         Map<String, Closure> pollBindings = [
@@ -106,6 +101,12 @@ class GPRGame extends BasicGame {
      */
     Player getCurrentPlayer() {
         return entities.reverse().find { it instanceof Player } as Player
+    }
+
+    Player getNextPlayer() {
+        Vector2f starts = track.startLocations.poll()
+        return starts == null ? null :
+                Player.getNext(starts.x as int, starts.y as int)
     }
 
     /**

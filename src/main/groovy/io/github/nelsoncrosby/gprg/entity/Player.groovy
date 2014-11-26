@@ -96,12 +96,10 @@ class Player extends Entity {
     }
 
 
-    /** List of colours to cycle through when getting a new player */
-    private static List<Color> colorsCycle = [
+    /** Queue of colours to cycle through when getting a new player */
+    private static Queue<Color> colorsCycle = new LinkedList<>([
             Color.blue, Color.red, Color.green
-    ]
-    /** Colour cycle counter */
-    private static int currentColor = 0
+    ])
     /**
      * Get a new player at the given position
      * Takes care of choosing a colour as well.
@@ -113,13 +111,12 @@ class Player extends Entity {
      *
      * @author Nelson Crosby
      */
-    static Player getNext(int gridSize = 1, int startX = 0, int startY = 0) {
-        Player player = new Player(gridSize, startX, startY)
+    static Player getNext(int startX = 0, int startY = 0) {
+        Player player = new Player(Track.CELL_WIDTH, startX, startY)
 
-        player.color = colorsCycle[currentColor]
-        currentColor++
-        if (currentColor >= colorsCycle.size())
-            currentColor = 0
+        // Cycle colours
+        player.color = colorsCycle.poll()
+        colorsCycle.offer(player.color)
 
         return player
     }

@@ -13,8 +13,6 @@ import org.newdawn.slick.geom.Vector2f
  * @author Nelson Crosby (github/NelsonCrosby)
  * @author Riley Steyn (github/RSteyn)
  */
-// There's some weird warnings coming out of here that make no sense.
-@SuppressWarnings(["GroovyAssignabilityCheck", "GrUnresolvedAccess"])
 class Track {
     /** The width of each cell on the screen (px) */
     static final int CELL_WIDTH = 12;
@@ -22,17 +20,21 @@ class Track {
     // Track properties
     Image imgTrack
     Vector2f size
+    Queue<Vector2f> startLocations
 
     Color offTrack = new Color(0, 100, 0, 255)
-    Color onTrack = new Color(255, 255, 255, 255)
+    @SuppressWarnings("GroovyUnusedDeclaration")
+    Color onTrack = Color.white
+    Color startLine = Color.black
 
     /**
      * Convenience constructor for simply passing an image.
      * Better for fast iterative development
      *
-     * @param img
+     * @param trackName Name for the track
      *
      * @author Riley Steyn
+     * @author Nelson Crosby
      */
     Track(String trackName) {
         String imgPath = "${trackName}.track.png"
@@ -41,24 +43,37 @@ class Track {
         )
         imgTrack.setFilter(Image.FILTER_NEAREST)
         size = new Vector2f(imgTrack.width, imgTrack.height)
+
+        startLocations = new LinkedList<>()
+        for (x in 0..imgTrack.width-1) {
+            for (y in 0..imgTrack.height-1) {
+                Color checking = imgTrack.getColor(x, y)
+                if (checking == startLine)
+                    startLocations.offer(new Vector2f(x, y))
+            }
+        }
+
+        // The first one isn't in a good spot, get rid of it
+        startLocations.poll()
     }
 
     /**
      * Check if an entity is within the track bounds
      *
      * @param entity Entity to check
-     * @return <code>true</code> if all surrounding tiles are
-     *         <code>onTrack</code>
+     * @return <code>true</code> if not all surrounding tiles are
+     *         <code>offTrack</code>
      *
      * @author Nelson Crosby
      * @author Riley Steyn
      */
     boolean isOnTrack(Entity entity) {
-        return imgTrack.getColor(entity.gridX, entity.gridY) == onTrack ||
-                imgTrack.getColor(entity.gridX, entity.gridY-1) == onTrack ||
-                imgTrack.getColor(entity.gridX-1, entity.gridY) == onTrack ||
-                imgTrack.getColor(entity.gridX-1, entity.gridY-1) == onTrack
+        return imgTrack.getColor(entity.gridX, entity.gridY) != offTrack ||
+                imgTrack.getColor(entity.gridX, entity.gridY-1) != offTrack ||
+                imgTrack.getColor(entity.gridX-1, entity.gridY) != offTrack ||
+                imgTrack.getColor(entity.gridX-1, entity.gridY-1) != offTrack
     }
+
     /**
      * Draw the track on the screen.
      *
