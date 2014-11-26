@@ -1,4 +1,13 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
+    }
+}
+
+
 apply plugin: 'groovy'
+apply plugin: 'eu.appsatori.fatjar'
 
 // Compatible with Java 7
 sourceCompatibility = 1.7
@@ -20,7 +29,8 @@ dependencies {
 // Copied from solution provided by Szczepan Faber on
 //  http://forums.gradle.org/gradle/topics/how_to_use_lwjgl_or_how_to_use_native_libraries
 
-['windows', 'linux', 'osx'].each { platform ->
+def platforms = ['windows', 'linux', 'osx']
+platforms.each { platform ->
     task "${platform}Natives" {
         def outputDir = "lib/natives-$platform"
         inputs.files(configurations.compile)
@@ -36,5 +46,11 @@ dependencies {
                 into outputDir
             }
         }
+    }
+}
+
+fatJar {
+    manifest {
+        attributes('Main-Class': 'io.github.nelsoncrosby.gprg.GPRGame')
     }
 }

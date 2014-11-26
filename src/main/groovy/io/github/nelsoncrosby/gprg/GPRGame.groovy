@@ -5,6 +5,8 @@ import io.github.nelsoncrosby.gprg.entity.Camera
 import io.github.nelsoncrosby.gprg.entity.Entity
 import io.github.nelsoncrosby.gprg.entity.Player
 import io.github.nelsoncrosby.gprg.track.Track
+import io.github.nelsoncrosby.utils.StreamUtils
+import io.github.nelsoncrosby.utils.Sys
 import org.newdawn.slick.*
 import org.newdawn.slick.geom.Vector2f
 
@@ -163,6 +165,8 @@ class GPRGame extends BasicGame {
     }
 
 
+    static final String APP_NAME = 'gprg'
+
     /**
      * Entry point.
      *
@@ -171,11 +175,58 @@ class GPRGame extends BasicGame {
      * @author Nelson Crosby
      */
     static void main(String[] args) {
+        try {
+            startGame()
+        } catch (UnsatisfiedLinkError ignored) {
+            // Natives aren't manually provided
+            extractNatives()
+            startGame()
+        }
+    }
+
+    private static void startGame() {
         // Stops your system yelling if game controllers aren't found
         log.fine 'Disabling controllers'
         Input.disableControllers()
 
         log.fine 'Constructing GPRGame'
         new GPRGame(960, 720)
+    }
+
+    /**
+     * Extracts natives provided with the jar according to natives-PLATFORM.list
+     *
+     * Cleans the code out of main
+     *
+     * @author Nelson Crosby
+     */
+    private static void extractNatives() {
+        log.info "Automatically providing natives"
+        String nativesListFName = "natives-${Sys.SYSTEM.name()}.list"
+        // Get the filename of the natives list
+        File nativesListFile = Sys.getPrivateFile(APP_NAME, "natives/$nativesListFName")
+        if (!nativesListFile.exists()) {
+            log.info 'Natives not extracted yet - extracting...'
+            // Ensure the containing directory exists
+            nativesListFile.parentFile.mkdirs()
+            // Get the relevant list from jar resources
+            def nativesList = StreamUtils.readWholeStream(
+                    GPRGame.getResourceAsStream("/$nativesListFName")
+            ).toString()
+            // Write to extracted file
+            StreamUtils.writeToFile(nativesList, nativesListFile)
+
+            nativesList.split('\n').each { nativeName ->
+                // Extract this native
+                log.fine "Extracting $nativeName..."
+                StreamUtils.copyStreams(
+                        GPRGame.getResourceAsStream("/$nativeName"),
+                        new FileOutputStream(Sys.getPrivateFile(APP_NAME, "natives/$nativeName"))
+                )
+            }
+        } else {/* File exists, so natives must already be extracted */}
+
+        // Set the natives directory
+        System.properties['java.library.path'] = Sys.getPrivateFile(APP_NAME, 'natives')
     }
 }
