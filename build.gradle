@@ -50,6 +50,8 @@ platforms.each { platform ->
 }
 
 fatJar {
+    classifier = 'dist'
+
     manifest {
         attributes('Main-Class': 'io.github.nelsoncrosby.gprg.GPRGame')
     }
