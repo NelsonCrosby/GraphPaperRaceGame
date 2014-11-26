@@ -184,6 +184,13 @@ class GPRGame extends BasicGame {
         }
     }
 
+    /**
+     * Begins the game
+     *
+     * The old {@link #main}, this makes it easier to handle providing of LWJGL
+     *
+     * @author Nelson Crosby
+     */
     private static void startGame() {
         // Stops your system yelling if game controllers aren't found
         log.fine 'Disabling controllers'
@@ -196,7 +203,7 @@ class GPRGame extends BasicGame {
     /**
      * Extracts natives provided with the jar according to natives-PLATFORM.list
      *
-     * Cleans the code out of main
+     * Cleans the code out of {@link #main}
      *
      * @author Nelson Crosby
      */
