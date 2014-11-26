@@ -50,7 +50,7 @@ It's gonna be this way, because Gradle prefers it like this. Also, it makes
 - `src/main/resources`: any extras that end up in the jar
 - `src/test/groovy`: all tests written in Groovy
 - `src/test/java`: you can guess
-- `src/test/resources`: extras that end up in the jar, only visible to test 
+- `src/test/resources`: extras that end up in the jar, only visible to test
     sources.
 - `build/`: Anything that Gradle has created
 - `bulid/docs/groovydoc`: OF NOTE - HTML form of documentation ends up here
@@ -65,6 +65,15 @@ It's gonna be this way, because Gradle prefers it like this. Also, it makes
 - Set the following in your run configurations:
     - Main class: `io.github.nelsoncrosby.gprg.GPRGame`
     - VM Options: `-Djava.library.path=lib/natives-${platform}`
+
+
+### Creating a distribution ###
+
+**NOTE: The standard distribution is currently broken (NoClassDefFoundError)**
+
+- Run `gradle fatJar`
+- The distribution jar can be found in `build/libs`
+- Natives will be automatically extracted upon running the jar
 
 
 ### Finding something to help with ###
