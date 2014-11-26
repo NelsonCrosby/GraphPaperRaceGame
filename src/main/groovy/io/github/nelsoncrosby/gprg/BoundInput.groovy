@@ -30,13 +30,15 @@ class BoundInput implements KeyListener {
         this.eventBindings = [:]
         Properties bindProp = new Properties()
 
+        // Load default bindings
+        bindProp.load(getClass().getResourceAsStream('input.properties'))
+
+        // Load extra bindings
         String propertyName = 'io.github.nelsoncrosby.gprg.inputBindings'
         if (System.properties.containsKey(propertyName))
             bindProp.load(new FileReader(
                     System.properties[propertyName] as String
             ))
-        else
-            bindProp.load(getClass().getResourceAsStream('input.properties'))
 
         for (String action : bindProp.stringPropertyNames()) {
             log.config "Keybind $action for ${bindProp[action]}"
