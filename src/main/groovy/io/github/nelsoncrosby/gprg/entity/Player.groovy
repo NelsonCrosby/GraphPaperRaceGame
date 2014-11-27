@@ -1,5 +1,6 @@
 package io.github.nelsoncrosby.gprg.entity
 
+import io.github.nelsoncrosby.gprg.Direction
 import io.github.nelsoncrosby.gprg.track.Track
 import org.newdawn.slick.Color
 import org.newdawn.slick.Graphics
@@ -45,10 +46,25 @@ class Player extends Entity {
     }
 
     /**
-     * Move the player by one square in the given direction up or down.
+     * Move the player one square in the given direction
      *
-     * @param direction The direction to move.
-     *        [<code>CONST.LEFT</code>|<code>CONST.RIGHT</code>]
+     * Calls relevant {@link #moveX} or {@link #moveY}
+     *
+     * @param direction Direction to move
+     *
+     * @author Nelson Crosby
+     */
+    void move(Direction direction) {
+        if (direction.axis == Direction.Axis.X)
+            moveX(direction.multiplier)
+        else
+            moveY(direction.multiplier)
+    }
+
+    /**
+     * Move the player by one square in the given direction left or right.
+     *
+     * @param direction The direction to move along X
      *
      * @author Nelson Crosby
      */
@@ -60,8 +76,7 @@ class Player extends Entity {
     /**
      * Move the player by one square in the given direction up or down.
      *
-     * @param direction The direction to move.
-     *        [<code>CONST.UP</code>|<code>CONST.DOWN</code>]
+     * @param direction The direction to move along Y
      *
      * @author Nelson Crosby
      */

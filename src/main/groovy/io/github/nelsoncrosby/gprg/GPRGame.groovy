@@ -74,17 +74,17 @@ class GPRGame extends BasicGame {
 
         log.finer 'Constructing input'
         Map<String, Closure> pollBindings = [
-                'camUp'   : { int delta -> camera.moveY(CONST.UP, delta) },
-                'camDown' : { int delta -> camera.moveY(CONST.DOWN, delta) },
-                'camLeft' : { int delta -> camera.moveX(CONST.LEFT, delta) },
-                'camRight': { int delta -> camera.moveX(CONST.RIGHT, delta) }
+                'camUp'   : { int delta -> camera.move(Direction.UP, delta) },
+                'camDown' : { int delta -> camera.move(Direction.DOWN, delta) },
+                'camLeft' : { int delta -> camera.move(Direction.LEFT, delta) },
+                'camRight': { int delta -> camera.move(Direction.RIGHT, delta) }
         ]
         Map<String, Closure> eventBindings = [
                 'quit'      : { log.info 'Quit on EVENT:quit'; gc.exit() },
-                'moveUp'    : { currentPlayer.moveY(CONST.UP) },
-                'moveDown'  : { currentPlayer.moveY(CONST.DOWN) },
-                'moveLeft'  : { currentPlayer.moveX(CONST.LEFT) },
-                'moveRight' : { currentPlayer.moveX(CONST.RIGHT) }
+                'moveUp'    : { currentPlayer.move(Direction.UP) },
+                'moveDown'  : { currentPlayer.move(Direction.DOWN) },
+                'moveLeft'  : { currentPlayer.move(Direction.LEFT) },
+                'moveRight' : { currentPlayer.move(Direction.RIGHT) }
         ]
         input = new BoundInput(gc.input, pollBindings, eventBindings)
 

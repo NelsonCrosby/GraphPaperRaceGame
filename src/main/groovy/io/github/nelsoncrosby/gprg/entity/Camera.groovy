@@ -1,5 +1,6 @@
 package io.github.nelsoncrosby.gprg.entity
 
+import io.github.nelsoncrosby.gprg.Direction
 import org.newdawn.slick.GameContainer
 import org.newdawn.slick.geom.Vector2f
 
@@ -29,6 +30,23 @@ class Camera {
                 (float) Math.ceil(gc.getWidth() / 2),
                 (float) Math.ceil(gc.getHeight() / 2)
         )
+    }
+
+    /**
+     * Move the camera the specified direction
+     *
+     * Calls the appropriate {@link #moveX} and {@link #moveY}
+     *
+     * @param direction Direction to move
+     * @param dt Distance to move
+     *
+     * @author Nelson Crosby
+     */
+    void move(Direction direction, float dt) {
+        if (direction.axis == Direction.Axis.X)
+            moveX(direction.multiplier, dt)
+        else
+            moveY(direction.multiplier, dt)
     }
 
     /**
