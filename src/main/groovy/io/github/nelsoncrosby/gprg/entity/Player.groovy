@@ -16,6 +16,8 @@ import static io.github.nelsoncrosby.gprg.Direction.Axis
 class Player extends Entity {
     /** The SIZE of the player when drawn */
     static final int SIZE = 6
+    /** The time (in ms) to wait for respawn */
+    private static final int RESPAWN_WAIT_TIME = 2000
     /** The current draw colour of the player */
     Color color
     /** Determines how the player is drawn, and whether or not it can move */
@@ -45,7 +47,17 @@ class Player extends Entity {
      * @author Nelson Crosby
      */
     @Override
-    void update(int delta, Track track) {}
+    boolean update(int delta, Track track) {
+        if (!onTrack) {
+            resetTimer += delta
+            if (resetTimer >= RESPAWN_WAIT_TIME) {
+                resetTimer = 0
+                return true
+            }
+        }
+        return false
+    }
+    private int resetTimer = 0
 
     /**
      * Update the player to next turn time step
@@ -107,6 +119,11 @@ class Player extends Entity {
             // Crashed, draw a cross
             gx.drawLine(x, y, x2, y2)  // Draw \ line
             gx.drawLine(x2, y, x, y2)  // Swap x to draw / line
+
+            gx.color = Color.white
+
+            def remainingSeconds = (RESPAWN_WAIT_TIME - resetTimer) / 1000
+            gx.drawString("Restarting in $remainingSeconds", 300, 20)
         }
     }
 

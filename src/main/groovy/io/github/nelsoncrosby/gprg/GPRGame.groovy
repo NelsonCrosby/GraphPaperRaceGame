@@ -130,7 +130,13 @@ class GPRGame extends BasicGame {
     @Override
     void update(GameContainer gc, int delta) throws SlickException {
         input.test(delta)
-        entities.each { it.update(delta, track) }
+        for (Entity entity : entities) {
+            if (entity.update(delta, track) /* Update entity */) {
+                // Entity requests game to restart
+                restart(gc)
+                break // Stop updating entities
+            }
+        }
     }
 
     /**
@@ -147,8 +153,6 @@ class GPRGame extends BasicGame {
     void render(GameContainer gc, Graphics gx) throws SlickException {
         track.render(gx, camera)
         entities.each { it.render(gx, camera) }
-        gx.drawString(currentPlayer.vel as String, 20, 20)
-        gx.drawString(currentPlayer.accel as String, 20, 35)
     }
 
     /**

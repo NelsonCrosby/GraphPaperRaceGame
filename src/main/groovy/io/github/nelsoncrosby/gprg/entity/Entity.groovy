@@ -51,8 +51,9 @@ abstract class Entity {
      *
      * @param delta Milliseconds since last called
      * @param track The currently active track
+     * @return {@code true} if the game should restart
      */
-    abstract void update(int delta, Track track)
+    abstract boolean update(int delta, Track track)
 
     /**
      * Render entity to the screen
