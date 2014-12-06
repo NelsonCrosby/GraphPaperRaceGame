@@ -129,8 +129,8 @@ class Player extends Entity {
             gx.drawOval(x, y, SIZE*2, SIZE*2)
 
             // Draw where the player will be if the next move occurs now
-            x += (vel.x + accel.x) * Track.CELL_WIDTH
-            y += (vel.y + accel.y) * Track.CELL_WIDTH
+            x += (vel.x + accel.x) * gridSize
+            y += (vel.y + accel.y) * gridSize
 
             // Use half-transparency for the guide
             gx.color = new Color(color.r, color.g, color.b, 0.5f)
