@@ -91,7 +91,7 @@ class GPRGame extends BasicGame {
     void restart(GameContainer gc) {
         log.info 'Restarting game'
         log.fine 'Constructing resources'
-        track = new Track('standard-oval')
+        track = new Track('oval')
         camera = new Camera(gc)
 
         Player.resetColors()

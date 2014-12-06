@@ -21,6 +21,7 @@ class Track {
     Image imgTrack
     Vector2f size
     Queue<Vector2f> startLocations
+    TrackInfo.Version0_1 info
 
     Color offTrack = new Color(0, 100, 0, 255)
     @SuppressWarnings("GroovyUnusedDeclaration")
@@ -37,10 +38,23 @@ class Track {
      * @author Nelson Crosby
      */
     Track(String trackName) {
-        String imgPath = "${trackName}.track.png"
-        imgTrack = new Image(
-                getClass().getResourceAsStream(imgPath), imgPath, false
+        String trackPath = "${trackName}.track"
+
+        ObjectInputStream inStream = new ObjectInputStream(
+                getClass().getResourceAsStream(trackPath)
         )
+
+        // Get the track info
+        def trackInfo = inStream.readObject() as TrackInfo
+        switch (trackInfo.version) {
+            case 0.1: info = trackInfo as TrackInfo.Version0_1; break
+            default:
+                throw new TrackInfo.VersionNotSupportedException(trackInfo.version)
+        }
+
+        // Parse track image
+        imgTrack = new Image(inStream /* Use remainder of bytes */,
+                trackPath, false)
         imgTrack.setFilter(Image.FILTER_NEAREST)  // Stops image blurring
         size = new Vector2f(imgTrack.width, imgTrack.height)
 
