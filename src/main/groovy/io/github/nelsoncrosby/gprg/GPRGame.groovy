@@ -66,11 +66,6 @@ class GPRGame extends BasicGame {
     void init(GameContainer gc) throws SlickException {
         log.fine 'gc settings'
         gc.showFPS = true
-        log.fine 'Constructing resources'
-        track = new Track('standard-oval')
-        camera = new Camera(gc)
-
-        entities = [nextPlayer]
 
         log.finer 'Constructing input'
         Map<String, Closure> pollBindings = [
@@ -85,9 +80,22 @@ class GPRGame extends BasicGame {
                 'accelDown' : { currentPlayer.accelerate(Direction.DOWN)  },
                 'accelLeft' : { currentPlayer.accelerate(Direction.LEFT)  },
                 'accelRight': { currentPlayer.accelerate(Direction.RIGHT) },
-                'nextTurn'  : { currentPlayer.performTurn(track) }
+                'nextTurn'  : { currentPlayer.performTurn(track) },
+                'restart'   : { restart(gc) }
         ]
         input = new BoundInput(gc.input, pollBindings, eventBindings)
+
+        restart(gc)
+    }
+
+    void restart(GameContainer gc) {
+        log.info 'Restarting game'
+        log.fine 'Constructing resources'
+        track = new Track('standard-oval')
+        camera = new Camera(gc)
+
+        Player.resetColors()
+        entities = [nextPlayer]
 
         log.info 'Game started'
     }

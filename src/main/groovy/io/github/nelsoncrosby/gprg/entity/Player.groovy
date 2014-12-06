@@ -112,9 +112,14 @@ class Player extends Entity {
 
 
     /** Queue of colours to cycle through when getting a new player */
-    private static Queue<Color> colorsCycle = new LinkedList<>([
-            Color.blue, Color.red, Color.green
-    ])
+    private static Queue<Color> colorsCycle
+    static { resetColors() }
+
+    public static resetColors() {
+        colorsCycle = new LinkedList<>([
+                Color.blue, Color.red, Color.green
+        ])
+    }
     /**
      * Get a new player at the given position
      * Takes care of choosing a colour as well.
