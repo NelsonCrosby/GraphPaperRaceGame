@@ -92,17 +92,23 @@ class Player extends Entity {
     @Override
     void render(Graphics gx, Vector2f screenPos) {
         gx.color = color
-        float x1 = screenPos.x - SIZE
-        float x2 = screenPos.x + SIZE
-        float y1 = screenPos.y - SIZE
-        float y2 = screenPos.y + SIZE
+        float x = screenPos.x - SIZE
+        float y = screenPos.y - SIZE
         if (onTrack) {
             // Draw player as circle
-            gx.drawOval(x1, y1, SIZE*2, SIZE*2)
+            gx.drawOval(x, y, SIZE*2, SIZE*2)
+
+            x += (vel.x + accel.x) * Track.CELL_WIDTH
+            y += (vel.y + accel.y) * Track.CELL_WIDTH
+
+            gx.color = new Color(color.r, color.g, color.b, 0.5)
+            gx.drawOval(x, y, SIZE*2, SIZE*2)
         } else {
+            float x2 = screenPos.x + SIZE
+            float y2 = screenPos.y + SIZE
             // Crashed, draw a cross
-            gx.drawLine(x1, y1, x2, y2)  // Draw \ line
-            gx.drawLine(x2, y1, x1, y2)  // Swap x to draw / line
+            gx.drawLine(x, y, x2, y2)  // Draw \ line
+            gx.drawLine(x2, y, x, y2)  // Swap x to draw / line
         }
     }
 

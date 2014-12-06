@@ -139,7 +139,8 @@ class GPRGame extends BasicGame {
     void render(GameContainer gc, Graphics gx) throws SlickException {
         track.render(gx, camera)
         entities.each { it.render(gx, camera) }
-        gx.drawString(currentPlayer.pos as String, 20, 20)
+        gx.drawString(currentPlayer.vel as String, 20, 20)
+        gx.drawString(currentPlayer.accel as String, 20, 35)
     }
 
     /**
