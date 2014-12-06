@@ -6,6 +6,8 @@ import org.newdawn.slick.Color
 import org.newdawn.slick.Graphics
 import org.newdawn.slick.geom.Vector2f
 
+import static io.github.nelsoncrosby.gprg.Direction.Axis
+
 /**
  * A "car" on the track
  *
@@ -17,7 +19,9 @@ class Player extends Entity {
     /** The current draw colour of the player */
     Color color
     /** Determines how the player is drawn, and whether or not it can move */
-    boolean onTrack
+    boolean onTrack = true
+    /** Holds acceleration of player for each turn */
+    Vector2f accel = new Vector2f(0, 0)
 
     /**
      * Construct to a position on the grid
@@ -30,6 +34,8 @@ class Player extends Entity {
      */
     Player(int gridSize, int startX, int startY) {
         super(gridSize, startX, startY)
+        // TODO: Get rid of this, implement acceleration
+        vel = vel.add(new Vector2f(1, 0))
     }
 
     /**
@@ -41,48 +47,38 @@ class Player extends Entity {
      * @author Nelson Crosby
      */
     @Override
-    void update(int delta, Track track) {
+    void update(int delta, Track track) {}
+
+    /**
+     * Update the player to next turn time step
+     * @param track The currently active track
+     */
+    void performTurn(Track track) {
+        vel.add(accel)
+        accel = new Vector2f(0, 0)
+        this.move(vel)
         onTrack = track.isOnTrack(this)
     }
 
     /**
-     * Move the player one square in the given direction
-     *
-     * Calls relevant {@link #moveX} or {@link #moveY}
-     *
-     * @param direction Direction to move
+     * Move the player by current velocity
      *
      * @author Nelson Crosby
      */
-    void move(Direction direction) {
-        if (direction.axis == Direction.Axis.X)
-            moveX(direction.multiplier)
-        else
-            moveY(direction.multiplier)
+    void move(Vector2f v) {
+        pos = pos.add(v)
     }
 
-    /**
-     * Move the player by one square in the given direction left or right.
-     *
-     * @param direction The direction to move along X
-     *
-     * @author Nelson Crosby
-     */
-    void moveX(int direction) {
-        if (onTrack)
-            gridX += direction
-    }
-
-    /**
-     * Move the player by one square in the given direction up or down.
-     *
-     * @param direction The direction to move along Y
-     *
-     * @author Nelson Crosby
-     */
-    void moveY(int direction) {
-        if (onTrack)
-            gridY -= direction
+    void accelerate(Direction dir) {
+        if (dir.axis == Axis.Y) {
+            accel.y += dir.multiplier
+            if (accel.y > 1) accel.y = 1
+            else if (accel.y < -1) accel.y = -1
+        } else if (dir.axis == Axis.X) {
+            accel.x = dir.multiplier
+            if (accel.x > 1) accel.x = 1
+            else if (accel.x < -1) accel.x = -1
+        }
     }
 
     /**

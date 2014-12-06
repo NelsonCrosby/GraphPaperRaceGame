@@ -41,7 +41,7 @@ class Track {
         imgTrack = new Image(
                 getClass().getResourceAsStream(imgPath), imgPath, false
         )
-        imgTrack.setFilter(Image.FILTER_NEAREST)
+        imgTrack.setFilter(Image.FILTER_NEAREST)  // Stops image blurring
         size = new Vector2f(imgTrack.width, imgTrack.height)
 
         startLocations = new LinkedList<>()
@@ -68,10 +68,11 @@ class Track {
      * @author Riley Steyn
      */
     boolean isOnTrack(Entity entity) {
-        return imgTrack.getColor(entity.gridX, entity.gridY) != offTrack ||
-                imgTrack.getColor(entity.gridX, entity.gridY-1) != offTrack ||
-                imgTrack.getColor(entity.gridX-1, entity.gridY) != offTrack ||
-                imgTrack.getColor(entity.gridX-1, entity.gridY-1) != offTrack
+        Vector2f pos = entity.pos
+        return imgTrack.getColor(pos.x as int, pos.y as int) != offTrack ||
+                imgTrack.getColor(pos.x as int, pos.y-1 as int) != offTrack ||
+                imgTrack.getColor(pos.x-1 as int, pos.y as int) != offTrack ||
+                imgTrack.getColor(pos.x-1 as int, pos.y-1 as int) != offTrack
     }
 
     /**

@@ -10,10 +10,10 @@ import org.newdawn.slick.geom.Vector2f
  * @author Nelson Crosby (github/NelsonCrosby)
  */
 abstract class Entity {
-    /** X position on the grid */
-    int gridX
-    /** Y position on the grid */
-    int gridY
+    /** Current position in grid */
+    Vector2f pos
+    /** Current velocity in grid-units */
+    Vector2f vel
     /** Size (in pixels) of each cell on the screen */
     int gridSize
 
@@ -28,8 +28,8 @@ abstract class Entity {
      */
     Entity(int gridSize = 1, int startX = 0, int startY = 0) {
         this.gridSize = gridSize
-        this.gridX = startX
-        this.gridY = startY
+        this.pos = new Vector2f(startX, startY)
+        this.vel = new Vector2f(0, 0)
     }
 
     /**
@@ -43,31 +43,7 @@ abstract class Entity {
     Entity(int gridSize, Vector2f startPos) {
         this.gridSize = gridSize
         this.pos = startPos
-    }
-
-    /**
-     * Pixel-based position on the map
-     * Getter for <code>pos</code>
-     *
-     * @return <code>pos</pos>
-     *
-     * @author Nelson Crosby
-     */
-    Vector2f getPos() {
-        return new Vector2f(gridX * gridSize, gridY * gridSize)
-    }
-
-    /**
-     * Pixel-based position on the map
-     * Setter for <code>pos</code>
-     *
-     * @param newPos New <code>pos</code>
-     *
-     * @author Nelson Crosby
-     */
-    void setPos(Vector2f newPos) {
-        gridX = newPos.x / gridSize
-        gridY = newPos.y / gridSize
+        this.vel = new Vector2f(0, 0)
     }
 
     /**
@@ -88,7 +64,7 @@ abstract class Entity {
      * @author Nelson Crosby
      */
     void render(Graphics gx, Camera camera) {
-        render(gx, camera.getScreenPos(pos))
+        render(gx, camera.getScreenPos(pos.copy().scale(gridSize)))
     }
 
     /**

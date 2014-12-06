@@ -18,8 +18,8 @@ enum Direction {
     Axis getAxis() {return axis}
 
     static {
-        UP.multiplier = 1
-        DOWN.multiplier = -1
+        UP.multiplier = -1
+        DOWN.multiplier = 1
         LEFT.multiplier = -1
         RIGHT.multiplier = 1
 

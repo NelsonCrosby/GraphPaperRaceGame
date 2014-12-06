@@ -12,7 +12,7 @@ import org.newdawn.slick.geom.Vector2f
  */
 class Camera {
     /** Hold positions of camera in world space */
-    Vector2f position = new Vector2f(0, 0)
+    Vector2f position = new Vector2f(45*12, -15*12)
 
     private float cameraSpeed = 1
     /** Holds half the (width, height) of screen */
@@ -70,13 +70,13 @@ class Camera {
      * @author Riley Steyn
      */
     void moveY(int direction, float dt) {
-        position.y -= (direction * cameraSpeed * dt)
+        position.y += (direction * cameraSpeed * dt)
     }
 
     /**
      * Get the position on the screen for any given position in the world
      *
-     * @param fieldPos Position in world
+     * @param fieldPos Position in world space (not grid)
      * @return Position on screen
      *
      * @author Nelson Crosby

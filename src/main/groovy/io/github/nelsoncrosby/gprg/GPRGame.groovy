@@ -80,11 +80,12 @@ class GPRGame extends BasicGame {
                 'camRight': { int delta -> camera.move(Direction.RIGHT, delta) }
         ]
         Map<String, Closure> eventBindings = [
-                'quit'      : { log.info 'Quit on EVENT:quit'; gc.exit() },
-                'moveUp'    : { currentPlayer.move(Direction.UP) },
-                'moveDown'  : { currentPlayer.move(Direction.DOWN) },
-                'moveLeft'  : { currentPlayer.move(Direction.LEFT) },
-                'moveRight' : { currentPlayer.move(Direction.RIGHT) }
+                'quit'      : { log.info 'Quit on EVENT:quit'; gc.exit()  },
+                'accelUp'   : { currentPlayer.accelerate(Direction.UP)    },
+                'accelDown' : { currentPlayer.accelerate(Direction.DOWN)  },
+                'accelLeft' : { currentPlayer.accelerate(Direction.LEFT)  },
+                'accelRight': { currentPlayer.accelerate(Direction.RIGHT) },
+                'nextTurn'  : { currentPlayer.performTurn(track) }
         ]
         input = new BoundInput(gc.input, pollBindings, eventBindings)
 
@@ -138,6 +139,7 @@ class GPRGame extends BasicGame {
     void render(GameContainer gc, Graphics gx) throws SlickException {
         track.render(gx, camera)
         entities.each { it.render(gx, camera) }
+        gx.drawString(currentPlayer.pos as String, 20, 20)
     }
 
     /**
