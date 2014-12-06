@@ -34,8 +34,6 @@ class Player extends Entity {
      */
     Player(int gridSize, int startX, int startY) {
         super(gridSize, startX, startY)
-        // TODO: Get rid of this, implement acceleration
-        vel = vel.add(new Vector2f(1, 0))
     }
 
     /**
@@ -75,7 +73,7 @@ class Player extends Entity {
             if (accel.y > 1) accel.y = 1
             else if (accel.y < -1) accel.y = -1
         } else if (dir.axis == Axis.X) {
-            accel.x = dir.multiplier
+            accel.x += dir.multiplier
             if (accel.x > 1) accel.x = 1
             else if (accel.x < -1) accel.x = -1
         }
