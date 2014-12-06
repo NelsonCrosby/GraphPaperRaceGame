@@ -54,9 +54,9 @@ class GPRGame extends BasicGame {
     }
 
     /**
-     * Initialize any resources needed
+     * Initialize any resources needed and start the game.
      *
-     * @param gc GameContainer context
+     * @param gc The {@link GameContainer} context
      * @throws SlickException
      *
      * @author Nelson Crosby
@@ -88,10 +88,17 @@ class GPRGame extends BasicGame {
         restart(gc)
     }
 
+    /**
+     * Load game resources for start/restart.
+     *
+     * @param gc The {@link GameContainer} context
+     *
+     * @author Nelson Crosby
+     */
     void restart(GameContainer gc) {
         log.info 'Restarting game'
         log.fine 'Constructing resources'
-        track = new Track('oval')
+        track = new Track('oval', Track)
         camera = new Camera(gc)
 
         Player.resetColors()
@@ -101,8 +108,8 @@ class GPRGame extends BasicGame {
     }
 
     /**
-     * Get the current player
-     * Current player is the last in <code>this.entities</code>
+     * Get the current player.
+     * Current player is the last in {@link #entities}.
      *
      * @return Currently active player
      *
@@ -112,14 +119,22 @@ class GPRGame extends BasicGame {
         return entities.reverse().find { it instanceof Player } as Player
     }
 
+    /**
+     * Finds the next starting position and returns an associated player.
+     *
+     * @return A player in a valid starting position
+     *
+     * @author Nelson Crosby
+     */
     Player getNextPlayer() {
-        Vector2f starts = track.startLocations.poll()
-        return starts == null ? null :
-                Player.getNext(starts.x as int, starts.y as int)
+        Vector2f pos = track.startLocations.poll()
+        return pos == null ? null /* Can't get a start position, so we don't
+                                     know where we can put the player */
+                : Player.getNext(pos.x as int, pos.y as int)
     }
 
     /**
-     * Contents of update loop
+     * Contents of update loop.
      *
      * @param gc GameContainer context
      * @param delta Milliseconds since last called
@@ -140,8 +155,8 @@ class GPRGame extends BasicGame {
     }
 
     /**
-     * Render code
-     * Called about once every update
+     * Render code.
+     * Called about once every update (but let's not rely on this).
      *
      * @param gc GameContainer context
      * @param gx Graphics context to draw to
@@ -166,8 +181,8 @@ class GPRGame extends BasicGame {
     /**
      * Called when the system requests for the window to close.
      *
-     * @return <code>true</code> when the window should be closed,
-     *         <code>false</code> otherwise.
+     * @return {@code true} when the window should be closed, {@code false}
+     *         otherwise.
      *
      * @author Nelson Crosby
      */

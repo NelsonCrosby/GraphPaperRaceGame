@@ -8,6 +8,7 @@ import org.newdawn.slick.geom.Vector2f
  * Something that can be displayed on the screen
  *
  * @author Nelson Crosby (github/NelsonCrosby)
+ * @author Riley Steyn (github/RSteyn)
  */
 abstract class Entity {
     /** Current position in grid */
@@ -18,13 +19,14 @@ abstract class Entity {
     int gridSize
 
     /**
-     * Construct to a position on the grid
+     * Construct to a position on the grid.
      *
      * @param gridSize Size (in pixels) of each cell on the screen
      * @param startX Starting gridX position
      * @param startY Starting gridY position
      *
      * @author Nelson Crosby
+     * @author Riley Steyn
      */
     Entity(int gridSize = 1, int startX = 0, int startY = 0) {
         this.gridSize = gridSize
@@ -33,21 +35,7 @@ abstract class Entity {
     }
 
     /**
-     * Construct to a position on the map
-     *
-     * @param gridSize Size (in pixels) of each cell on the screen
-     * @param startPos Starting map position
-     *
-     * @author Nelson Crosby
-     */
-    Entity(int gridSize, Vector2f startPos) {
-        this.gridSize = gridSize
-        this.pos = startPos
-        this.vel = new Vector2f(0, 0)
-    }
-
-    /**
-     * Perform changes to the entity
+     * Perform changes to the entity.
      *
      * @param delta Milliseconds since last called
      * @param track The currently active track
@@ -56,10 +44,10 @@ abstract class Entity {
     abstract boolean update(int delta, Track track)
 
     /**
-     * Render entity to the screen
-     * Calls the abstract method, giving actual screen co-ordinates
+     * Render entity to the screen.
+     * Calls the abstract method, giving actual screen co-ordinates.
      *
-     * @param gx Graphics context to draw to
+     * @param gx {@link Graphics} context to draw to
      * @param actualPos Camera object to determine actual position
      *
      * @author Nelson Crosby
@@ -69,9 +57,9 @@ abstract class Entity {
     }
 
     /**
-     * Render entity to the screen
+     * Render entity to the screen.
      *
-     * @param gx Graphics context to draw to
+     * @param gx {@link Graphics} context to draw to
      * @param screenPos Actual position of the entity on the screen
      */
     protected abstract void render(Graphics gx, Vector2f screenPos)
