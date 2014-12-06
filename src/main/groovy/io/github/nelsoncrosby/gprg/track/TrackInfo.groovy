@@ -12,9 +12,12 @@ class TrackInfo implements Serializable {
         }
     }
 
-    float version
-    static class Version0_1 extends TrackInfo {
-        float version = 0.1
+    private static final long serialVersionUID = 0
+
+    int version
+    static class Version1 extends TrackInfo {
+        private static final long serialVersionUID = 1
+        int version = 1
         String trackName
         Direction startLineDirection
     }

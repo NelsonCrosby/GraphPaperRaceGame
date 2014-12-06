@@ -21,7 +21,7 @@ class Track {
     Image imgTrack
     Vector2f size
     Queue<Vector2f> startLocations
-    TrackInfo.Version0_1 info
+    TrackInfo.Version1 info
 
     Color offTrack = new Color(0, 100, 0, 255)
     @SuppressWarnings("GroovyUnusedDeclaration")
@@ -47,7 +47,7 @@ class Track {
         // Get the track info
         def trackInfo = inStream.readObject() as TrackInfo
         switch (trackInfo.version) {
-            case 0.1: info = trackInfo as TrackInfo.Version0_1; break
+            case 1: info = trackInfo as TrackInfo.Version1; break
             default:
                 throw new TrackInfo.VersionNotSupportedException(trackInfo.version)
         }

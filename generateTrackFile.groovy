@@ -10,7 +10,7 @@ print 'Track name: '; def trackName = stdin.readLine()
 print 'Start line direction: '; def startDirection = stdin.readLine()
 
 // Populate trackInfo
-def trackInfo = new TrackInfo.Version0_1()
+def trackInfo = new TrackInfo.Version1()
 
 trackInfo.trackName = trackName
 
