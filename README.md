@@ -64,12 +64,10 @@ It's gonna be this way, because Gradle prefers it like this. Also, it makes
     the appropriate set for your system (e.g. `$ gradle linuxNatives`)
 - Set the following in your run configurations:
     - Main class: `io.github.nelsoncrosby.gprg.GPRGame`
-    - VM Options: `-Djava.library.path=lib/natives-${platform}`
+    - VM Options: `-Dorg.lwjgl.librarypath=lib/natives-${platform}`
 
 
 ### Creating a distribution ###
-
-**NOTE: The standard distribution is currently broken (NoClassDefFoundError)**
 
 - Run `gradle fatJar`
 - The distribution jar can be found in `build/libs`

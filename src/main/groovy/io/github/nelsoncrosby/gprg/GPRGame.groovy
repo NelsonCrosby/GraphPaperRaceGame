@@ -205,13 +205,19 @@ class GPRGame extends BasicGame {
      * @author Nelson Crosby
      */
     static void main(String[] args) {
-        try {
-            startGame()
-        } catch (UnsatisfiedLinkError ignored) {
+        String libPathProp = 'org.lwjgl.librarypath',
+                libPath = System.getProperty(libPathProp)
+
+        if (libPath == null) {
             // Natives aren't manually provided
             extractNatives()
-            startGame()
+        } else {
+            // Natives manually defined, but we might need to make sure they
+            // point to an absolute path
+            System.setProperty(libPathProp, new File(libPath).absolutePath)
         }
+
+        startGame()
     }
 
     /**
@@ -264,6 +270,6 @@ class GPRGame extends BasicGame {
         } else {/* File exists, so natives must already be extracted */}
 
         // Set the natives directory
-        System.properties['java.library.path'] = Sys.getPrivateFile(APP_NAME, 'natives')
+        System.setProperty('org.lwjgl.librarypath', Sys.getPrivateFile(APP_NAME, 'natives').absolutePath)
     }
 }
