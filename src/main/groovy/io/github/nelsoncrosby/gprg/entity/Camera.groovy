@@ -43,9 +43,9 @@ class Camera {
      */
     void move(Direction direction, float dt) {
         if (direction.axis == Direction.Axis.X)
-            position.x += (direction * cameraSpeed * dt)
+            position.x += (direction.multiplier * cameraSpeed * dt)
         else
-            position.y += (direction * cameraSpeed * dt)
+            position.y += (direction.multiplier * cameraSpeed * dt)
     }
 
     /**
