@@ -56,9 +56,9 @@ class GPRGame extends BasicGame {
     }
 
     /**
-     * Initialize any resources needed
+     * Initialize any resources needed and start the game.
      *
-     * @param gc GameContainer context
+     * @param gc The {@link GameContainer} context
      * @throws SlickException
      *
      * @author Nelson Crosby
@@ -68,11 +68,6 @@ class GPRGame extends BasicGame {
     void init(GameContainer gc) throws SlickException {
         log.fine 'gc settings'
         gc.showFPS = true
-        log.fine 'Constructing resources'
-        track = new Track('standard-oval')
-        camera = new Camera(gc)
-
-        entities = [nextPlayer]
 
         log.finer 'Constructing input'
         Map<String, Closure> pollBindings = [
@@ -82,20 +77,41 @@ class GPRGame extends BasicGame {
                 'camRight': { int delta -> camera.move(Direction.RIGHT, delta) }
         ]
         Map<String, Closure> eventBindings = [
-                'quit'      : { log.info 'Quit on EVENT:quit'; gc.exit() },
-                'moveUp'    : { currentPlayer.move(Direction.UP) },
-                'moveDown'  : { currentPlayer.move(Direction.DOWN) },
-                'moveLeft'  : { currentPlayer.move(Direction.LEFT) },
-                'moveRight' : { currentPlayer.move(Direction.RIGHT) }
+                'quit'      : { log.info 'Quit on EVENT:quit'; gc.exit()  },
+                'accelUp'   : { currentPlayer.accelerate(Direction.UP)    },
+                'accelDown' : { currentPlayer.accelerate(Direction.DOWN)  },
+                'accelLeft' : { currentPlayer.accelerate(Direction.LEFT)  },
+                'accelRight': { currentPlayer.accelerate(Direction.RIGHT) },
+                'nextTurn'  : { currentPlayer.performTurn(track) },
+                'restart'   : { restart(gc) }
         ]
         input = new BoundInput(gc.input, pollBindings, eventBindings)
+
+        restart(gc)
+    }
+
+    /**
+     * Load game resources for start/restart.
+     *
+     * @param gc The {@link GameContainer} context
+     *
+     * @author Nelson Crosby
+     */
+    void restart(GameContainer gc) {
+        log.info 'Restarting game'
+        log.fine 'Constructing resources'
+        track = new Track('oval', Track)
+        camera = new Camera(gc)
+
+        Player.resetColors()
+        entities = [nextPlayer]
 
         log.info 'Game started'
     }
 
     /**
-     * Get the current player
-     * Current player is the last in <code>this.entities</code>
+     * Get the current player.
+     * Current player is the last in {@link #entities}.
      *
      * @return Currently active player
      *
@@ -105,14 +121,22 @@ class GPRGame extends BasicGame {
         return entities.reverse().find { it instanceof Player } as Player
     }
 
+    /**
+     * Finds the next starting position and returns an associated player.
+     *
+     * @return A player in a valid starting position
+     *
+     * @author Nelson Crosby
+     */
     Player getNextPlayer() {
-        Vector2f starts = track.startLocations.poll()
-        return starts == null ? null :
-                Player.getNext(starts.x as int, starts.y as int)
+        Vector2f pos = track.startLocations.poll()
+        return pos == null ? null /* Can't get a start position, so we don't
+                                     know where we can put the player */
+                : Player.getNext(pos.x as int, pos.y as int)
     }
 
     /**
-     * Contents of update loop
+     * Contents of update loop.
      *
      * @param gc GameContainer context
      * @param delta Milliseconds since last called
@@ -123,12 +147,18 @@ class GPRGame extends BasicGame {
     @Override
     void update(GameContainer gc, int delta) throws SlickException {
         input.test(delta)
-        entities.each { it.update(delta, track) }
+        for (Entity entity : entities) {
+            if (entity.update(delta, track) /* Update entity */) {
+                // Entity requests game to restart
+                restart(gc)
+                break // Stop updating entities
+            }
+        }
     }
 
     /**
-     * Render code
-     * Called about once every update
+     * Render code.
+     * Called about once every update (but let's not rely on this).
      *
      * @param gc GameContainer context
      * @param gx Graphics context to draw to
@@ -153,8 +183,8 @@ class GPRGame extends BasicGame {
     /**
      * Called when the system requests for the window to close.
      *
-     * @return <code>true</code> when the window should be closed,
-     *         <code>false</code> otherwise.
+     * @return {@code true} when the window should be closed, {@code false}
+     *         otherwise.
      *
      * @author Nelson Crosby
      */

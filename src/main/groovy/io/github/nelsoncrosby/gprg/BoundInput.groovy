@@ -5,7 +5,7 @@ import org.newdawn.slick.Input
 import org.newdawn.slick.KeyListener
 
 /**
- * Class for simplifying the way input works
+ * Class for simplifying the way input works.
  *
  * @author Nelson Crosby (github/NelsonCrosby)
  */
@@ -40,9 +40,11 @@ class BoundInput implements KeyListener {
                     System.properties[propertyName] as String
             ))
 
-        for (String action : bindProp.stringPropertyNames()) {
+        for (String action : bindProp.stringPropertyNames()) /* Bind actions */ {
             log.config "Keybind $action for ${bindProp[action]}"
+            // Get the key-code from Input
             int key = Input[bindProp[action] as String] as int
+            // Bind to action
             if (pollActions.containsKey(action))
                 pollBindings[key] = pollActions[action]
             else if (eventActions.containsKey(action))
@@ -51,7 +53,7 @@ class BoundInput implements KeyListener {
     }
 
     /**
-     * Test for currently active inputs
+     * Test for currently active inputs.
      *
      * @param delta Time since last update (sent to binding)
      *
@@ -65,9 +67,10 @@ class BoundInput implements KeyListener {
     }
 
     /**
-     * Notification that a key was pressed
+     * Notification that a key was pressed.
      *
-     * @param key The key code that was pressed (@see org.newdawn.slick.Input)
+     * @param key The key code that was pressed
+     *            (see {@link org.newdawn.slick.Input})
      * @param c The character of the key that was pressed
      *
      * @author Nelson Crosby
@@ -80,16 +83,17 @@ class BoundInput implements KeyListener {
     }
 
     /**
-     * Notification that a key was released
+     * Notification that a key was released.
      *
-     * @param key The key code that was released (@see org.newdawn.slick.Input)
+     * @param key The key code that was released
+     *            (see {@link org.newdawn.slick.Input})
      * @param c The character of the key that was released
      */
     @Override
     void keyReleased(int key, char c) {}
 
     /**
-     * Set the input that events are being sent from
+     * Set the input that events are being sent from.
      *
      * @param input The input instance sending events
      */
@@ -97,7 +101,7 @@ class BoundInput implements KeyListener {
     void setInput(Input input) {}
 
     /**
-     * Check if this input listener is accepting input
+     * Check if this input listener is accepting input.
      *
      * @return True if the input listener should recieve events
      */
@@ -107,13 +111,13 @@ class BoundInput implements KeyListener {
     }
 
     /**
-     * Notification that all input events have been sent for this frame
+     * Notification that all input events have been sent for this frame.
      */
     @Override
     void inputEnded() {}
 
     /**
-     * Notification that input is about to be processed
+     * Notification that input is about to be processed.
      */
     @Override
     void inputStarted() {}
