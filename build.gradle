@@ -26,7 +26,7 @@ repositories {
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.3.6'
     compile 'org.slick2d:slick2d-core:1.0.1'
-    compile 'io.github.nelsoncrosby:NCUtils:0.1.1'
+    compile 'io.github.nelsoncrosby:NCUtils:0.1.2'
     // Using JUnit for testing (when that happens)
     testCompile 'junit:junit:4.11'
 }
