@@ -23,6 +23,9 @@ class Player extends Entity {
     Color color
     /** Determines how the player is drawn, and whether or not it can move */
     boolean onTrack = true
+    // TODO: Remove this variable
+    /** Holds whether the player has crossed the finish line this turn */
+    boolean crossedFinish
     /** Holds acceleration of player for each turn */
     Vector2f accel = new Vector2f(0, 0)
 
@@ -70,12 +73,39 @@ class Player extends Entity {
      * @author Riley Steyn
      */
     void performTurn(Track track) {
+
         vel.add(accel)
+
         accel = new Vector2f(0, 0)
 
+        Vector2f playerInitialPos = pos.copy()
         move(vel)
 
+        // Check that player is still on track
         onTrack = track.isOnTrack(this)
+
+        // Check whether the player has crossed the finish line
+        Vector2f startLinePoint = track.startLocations.peek()
+        Vector2f initialStartDisplacement = playerInitialPos.sub(startLinePoint)
+        Vector2f finalStartDisplacement = pos.copy().sub(startLinePoint)
+
+        crossedFinish = false
+        int multiplier = track.info.startLineDirection.multiplier
+        if (track.info.startLineDirection.axis == Axis.X) {
+            // Start line is vertical
+            if (initialStartDisplacement.x * multiplier <= 0 &&
+                    finalStartDisplacement.x * multiplier >= 0) {
+                // Player has crossed the finish line this turn
+                crossedFinish = true
+            }
+        } else {
+            // Start line is horizontal
+            if (initialStartDisplacement.y * multiplier <= 0 &&
+                    finalStartDisplacement.y * multiplier >= 0) {
+                // Player has crossed the finish line this turn
+                crossedFinish = true
+            }
+        }
     }
 
     /**
@@ -128,9 +158,17 @@ class Player extends Entity {
             // Draw player as circle
             gx.drawOval(x, y, SIZE*2, SIZE*2)
 
+            // Draw where player's next location with no acceleration
+            x += vel.x * gridSize
+            y += vel.y * gridSize
+
+            // Use half-transparency for the guide
+            gx.color = new Color(255, color.g, color.b, 0.75f)
+            gx.drawOval(x, y, SIZE*2, SIZE*2)
+
             // Draw where the player will be if the next move occurs now
-            x += (vel.x + accel.x) * gridSize
-            y += (vel.y + accel.y) * gridSize
+            x += accel.x * gridSize
+            y += accel.y * gridSize
 
             // Use half-transparency for the guide
             gx.color = new Color(color.r, color.g, color.b, 0.5f)

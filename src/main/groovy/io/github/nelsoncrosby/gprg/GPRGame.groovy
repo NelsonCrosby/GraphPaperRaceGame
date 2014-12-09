@@ -170,6 +170,9 @@ class GPRGame extends BasicGame {
     void render(GameContainer gc, Graphics gx) throws SlickException {
         track.render(gx, camera)
         entities.each { it.render(gx, camera) }
+        gx.color = Color.white
+        gx.drawString(currentPlayer.crossedFinish as String, 20, 20)
+        gx.drawString(currentPlayer.pos as String, 20, 40)
     }
 
     /**
