@@ -1,5 +1,6 @@
 package io.github.nelsoncrosby.gprg.track
 
+import io.github.nelsoncrosby.gprg.Direction
 import io.github.nelsoncrosby.gprg.entity.Camera
 import io.github.nelsoncrosby.gprg.entity.Entity
 import org.newdawn.slick.Color
@@ -20,7 +21,7 @@ class Track {
     // Track properties
     Image trackDef
     Vector2f size
-    Queue<Vector2f> startLocations
+    Deque<Vector2f> startLocations
     TrackInfo.Version1 info
 
     Color offTrack = new Color(0, 100, 0, 255)
@@ -109,6 +110,11 @@ class Track {
                 Color checking = trackDef.getColor(x, y)
                 if (checking == startLine) {
                     def pos = new Vector2f(x, y)
+                    if (info.startLineDirection == Direction.RIGHT) {
+                        pos.x += 1
+                    } else if (info.startLineDirection == Direction.DOWN) {
+                        pos.y += 1
+                    }
                     // Add pos to the queue
                     startLocations.offer(pos)
                 }
@@ -132,6 +138,11 @@ class Track {
      */
     boolean isOnTrack(Entity entity) {
         Vector2f pos = entity.pos
+        if (pos.x < 0 || pos.x > trackDef.width ||
+                pos.y < 0 || pos.y > trackDef.height) {
+            // Illegal state - outside of track bounds
+            return false
+        }
         return trackDef.getColor(pos.x as int, pos.y as int) != offTrack ||
                 trackDef.getColor(pos.x as int, pos.y-1 as int) != offTrack ||
                 trackDef.getColor(pos.x-1 as int, pos.y as int) != offTrack ||

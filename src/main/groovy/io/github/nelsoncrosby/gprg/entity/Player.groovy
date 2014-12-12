@@ -85,34 +85,46 @@ class Player extends Entity {
             // Check that player is still on track
             onTrack = track.isOnTrack(this)
 
-            if (onTrack) /* Cannot win if also crashed */ {
+            if (!firstTurn && onTrack) /* Cannot win if also crashed */ {
                 // Check whether the player has crossed the finish line
-                Vector2f startLinePoint = track.startLocations.peek()
+                Vector2f startLineFirst = track.startLocations.peekFirst()
+                Vector2f startLineLast = track.startLocations.peekLast()
                 // Holds player displacement from the start line point initially
-                Vector2f initialDisp = playerInitialPos.sub(startLinePoint)
+                Vector2f initialDisp = playerInitialPos.sub(startLineFirst)
                 // Holds player displacement from the start line point after moving
-                Vector2f finalDisp = pos.copy().sub(startLinePoint)
+                Vector2f finalDisp = pos.copy().sub(startLineFirst)
 
                 crossedFinish = false
                 int multiplier = track.info.startLineDirection.multiplier
                 if (track.info.startLineDirection.axis == Axis.X) {
                     // Start line is vertical
-                    if (initialDisp.x * multiplier <= 0 &&
-                            finalDisp.x * multiplier >= 0) {
-                        // Player has crossed the finish line this turn
-                        crossedFinish = true
+                    if ((initialDisp.x * multiplier <= 0 &&
+                            finalDisp.x * multiplier >= 0)) {
+                        // Player has crossed the finish line along X this turn
+                        // Check that the player is in the correct Y range
+                        if (pos.y >= startLineFirst.y-2 &&
+                                pos.y <= startLineLast.y+1) {
+                            crossedFinish = true
+                        }
                     }
                 } else {
                     // Start line is horizontal
                     if (initialDisp.y * multiplier <= 0 &&
                             finalDisp.y * multiplier >= 0) {
-                        // Player has crossed the finish line this turn
-                        crossedFinish = true
+                        // Player has crossed the finish line along Y this turn
+                        // Check that the player is in the correct X range
+                        if (pos.x >= startLineFirst.x-2 &&
+                                pos.x <= startLineLast.x+1) {
+                            crossedFinish = true
+                        }
                     }
                 }
             }
+
+            firstTurn = false
         }
     }
+    private boolean firstTurn = true
 
     /**
      * Move the player by the given distance.
