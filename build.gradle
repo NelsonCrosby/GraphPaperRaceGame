@@ -11,8 +11,8 @@ apply plugin: 'eu.appsatori.fatjar'
 
 // Compatible with Java 7
 sourceCompatibility = 1.7
-// No versions until we actually start working on the project proper
-version = '0.0.0'
+
+version = '0.1.0'
 
 repositories {
     mavenCentral()
