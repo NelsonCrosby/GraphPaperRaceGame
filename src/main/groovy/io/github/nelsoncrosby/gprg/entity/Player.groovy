@@ -88,7 +88,9 @@ class Player extends Entity {
             if (onTrack) /* Cannot win if also crashed */ {
                 // Check whether the player has crossed the finish line
                 Vector2f startLinePoint = track.startLocations.peek()
+                // Holds player displacement from the start line point initially
                 Vector2f initialStartDisplacement = playerInitialPos.sub(startLinePoint)
+                // Holds player displacement from the start line point after moving
                 Vector2f finalStartDisplacement = pos.copy().sub(startLinePoint)
 
                 crossedFinish = false

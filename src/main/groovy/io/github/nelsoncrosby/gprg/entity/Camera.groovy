@@ -12,7 +12,7 @@ import org.newdawn.slick.geom.Vector2f
  */
 class Camera {
     /** Hold positions of camera in world space */
-    Vector2f position = new Vector2f(45*12, -15*12)
+    Vector2f position
     /** The current speed of the camera (px/ms) */
     private float cameraSpeed = 1
     /** Holds half the (width, height) of screen */
@@ -25,11 +25,12 @@ class Camera {
      *
      * @author Riley Steyn
      */
-    Camera(GameContainer gc) {
+    Camera(GameContainer gc, Vector2f position) {
         halfSize = new Vector2f(
                 (float) Math.ceil(gc.getWidth() / 2),
                 (float) Math.ceil(gc.getHeight() / 2)
         )
+        this.position = position
     }
 
     /**
@@ -56,10 +57,10 @@ class Camera {
      *
      * @author Nelson Crosby
      */
-    Vector2f getScreenPos(Vector2f fieldPos) {
+    Vector2f getScreenPos(Vector2f worldPos) {
         return new Vector2f(
-                fieldPos.x - position.x as float,
-                fieldPos.y - position.y as float
+                worldPos.x - position.x as float,
+                worldPos.y - position.y as float
         )
     }
 }
