@@ -86,22 +86,24 @@ class Player extends Entity {
 
         // Check whether the player has crossed the finish line
         Vector2f startLinePoint = track.startLocations.peek()
-        Vector2f initialStartDisplacement = playerInitialPos.sub(startLinePoint)
-        Vector2f finalStartDisplacement = pos.copy().sub(startLinePoint)
+        // Holds player displacement from the start line point initially
+        Vector2f initialDisp = playerInitialPos.sub(startLinePoint)
+        // Holds player displacement from the start line point after moving
+        Vector2f finalDisp = pos.copy().sub(startLinePoint)
 
         crossedFinish = false
         int multiplier = track.info.startLineDirection.multiplier
         if (track.info.startLineDirection.axis == Axis.X) {
             // Start line is vertical
-            if (initialStartDisplacement.x * multiplier <= 0 &&
-                    finalStartDisplacement.x * multiplier >= 0) {
+            if (initialDisp.x * multiplier <= 0 &&
+                    finalDisp.x * multiplier >= 0) {
                 // Player has crossed the finish line this turn
                 crossedFinish = true
             }
         } else {
             // Start line is horizontal
-            if (initialStartDisplacement.y * multiplier <= 0 &&
-                    finalStartDisplacement.y * multiplier >= 0) {
+            if (initialDisp.y * multiplier <= 0 &&
+                    finalDisp.y * multiplier >= 0) {
                 // Player has crossed the finish line this turn
                 crossedFinish = true
             }
