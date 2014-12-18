@@ -1,37 +1,21 @@
 package io.github.nelsoncrosby.gprg
 
 import groovy.util.logging.Log
-import io.github.nelsoncrosby.gprg.entity.Camera
-import io.github.nelsoncrosby.gprg.entity.Entity
-import io.github.nelsoncrosby.gprg.entity.Player
-import io.github.nelsoncrosby.gprg.track.Track
+import io.github.nelsoncrosby.gprg.states.GameState
 import io.github.nelsoncrosby.utils.StreamUtils
 import io.github.nelsoncrosby.utils.Sys
 import org.newdawn.slick.*
-import org.newdawn.slick.geom.Vector2f
+import org.newdawn.slick.state.StateBasedGame
 
 /**
- * Root class for handling game creation and updating.
+ * Root class for handling game creation and queueing of states
  *
  * @author Nelson Crosby (github/NelsonCrosby)
  * @author Riley Steyn (github/RSteyn)
  */
 @Log
-class GPRGame extends BasicGame {
-    /** Provides a slightly nicer input binding system */
-    BoundInput input
-    /** Camera object controlling the screen */
-    Camera camera
-    /** Currently active track and track variables */
-    Track track
-    int trackID
-    List<String> tracks = Arrays.asList(
-            'oval',
-            'really-long',
-            'test1'
-    )
-    /** Active entities */
-    List<Entity> entities
+class GPRGame extends StateBasedGame {
+    private GameState trackState
 
     /**
      * Construct the game and start it.
@@ -60,90 +44,17 @@ class GPRGame extends BasicGame {
         super(CONST.TITLE)
     }
 
-    // Top-level game architecture methods
-    /**
-     * Initialize any resources needed and start the game.
-     *
-     * @param gc The {@link GameContainer} context
-     * @throws SlickException
-     *
-     * @author Nelson Crosby
-     * @author Riley Steyn
-     */
-    @Override
-    void init(GameContainer gc) throws SlickException {
-        log.fine 'gc settings'
-        gc.showFPS = true
-
-        log.finer 'Constructing input'
-        Map<String, Closure> pollBindings = [
-                'camUp'   : { int delta -> camera.move(Direction.UP, delta) },
-                'camDown' : { int delta -> camera.move(Direction.DOWN, delta) },
-                'camLeft' : { int delta -> camera.move(Direction.LEFT, delta) },
-                'camRight': { int delta -> camera.move(Direction.RIGHT, delta) }
-        ]
-        Map<String, Closure> eventBindings = [
-                'quit'      : { log.info 'Quit on EVENT:quit'; gc.exit()  },
-                'accelUp'   : { currentPlayer.accelerate(Direction.UP)    },
-                'accelDown' : { currentPlayer.accelerate(Direction.DOWN)  },
-                'accelLeft' : { currentPlayer.accelerate(Direction.LEFT)  },
-                'accelRight': { currentPlayer.accelerate(Direction.RIGHT) },
-                'nextTurn'  : { currentPlayer.performTurn(track) },
-                'nextTrack'  : { nextTrack(gc) },
-                'restart'   : { restart(gc) }
-        ]
-        input = new BoundInput(gc.input, pollBindings, eventBindings)
-        trackID = 0
-        restart(gc)
-    }
 
     /**
-     * Contents of update loop.
+     * Initialise the list of states making up this game
      *
-     * @param gc GameContainer context
-     * @param delta Milliseconds since last called
-     * @throws SlickException
-     *
-     * @author Nelson Crosby
+     * @param gc The container holding the game
+     * @throws SlickException Indicates a failure to initialise the state based game resources
      */
     @Override
-    void update(GameContainer gc, int delta) throws SlickException {
-        input.test(delta)
-        for (Entity entity : entities) {
-            if (entity.update(delta, track) /* Update entity */) {
-                // Entity requests game to restart
-                restart(gc)
-                break // Stop updating entities
-            }
-        }
-    }
-
-    /**
-     * Render code.
-     * Called about once every update (but let's not rely on this).
-     *
-     * @param gc GameContainer context
-     * @param gx Graphics context to draw to
-     * @throws SlickException
-     *
-     * @author Riley Steyn
-     */
-    @Override
-    void render(GameContainer gc, Graphics gx) throws SlickException {
-        track.render(gx, camera)
-        entities.each { it.render(gx, camera) }
-        gx.color = Color.white
-        gx.drawString(currentPlayer.crossedFinish as String, 20, 20)
-        gx.drawString(currentPlayer.pos as String, 20, 40)
-    }
-
-    // Input methods
-    /**
-     *
-     */
-    @Override
-    void keyPressed(int key, char c) {
-        input.keyPressed(key, c)
+    void initStatesList(GameContainer gc) throws SlickException {
+        this.trackState = new GameState()
+        addState(trackState)
     }
 
     // Misc ? (needs better classification)
@@ -159,63 +70,6 @@ class GPRGame extends BasicGame {
     boolean closeRequested() {
         log.info 'Quit on system request'
         return true
-    }
-
-    /**
-     * Get the current player.
-     * Current player is the last in {@link #entities}.
-     *
-     * @return Currently active player
-     *
-     * @author Nelson Crosby
-     */
-    Player getCurrentPlayer() {
-        return entities.reverse().find { it instanceof Player } as Player
-    }
-
-    /**
-     * Finds the next starting position and returns an associated player.
-     *
-     * @return A player in a valid starting position
-     *
-     * @author Nelson Crosby
-     */
-    Player getNextPlayer() {
-        Vector2f pos = track.startLocations.poll()
-        return pos == null ? null /* Can't get a start position, so we don't
-                                     know where we can put the player */
-                : Player.getNext(pos.x as int, pos.y as int)
-    }
-
-    /**
-     * Load game resources for start/restart.
-     *
-     * @param gc The {@link GameContainer} context
-     *
-     * @author Nelson Crosby
-     */
-    void restart(GameContainer gc) {
-        log.info 'Restarting game'
-        log.fine 'Constructing resources'
-        track = new Track(tracks.get(trackID), Track)
-        camera = new Camera(gc, new Vector2f(45*12, -15*12))
-        Player.resetColors()
-        entities = [nextPlayer]
-
-        log.info 'Game started'
-    }
-
-    /**
-     * Simply iterate trackID to next id.
-     * @param gc The {@link GameContainer} context
-     */
-    private void nextTrack(GameContainer gc)
-    {
-        trackID += 1
-        if (trackID == tracks.size()) {
-            trackID = 0
-        }
-        restart(gc)
     }
 
     static final String APP_NAME = 'gprg'
