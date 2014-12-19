@@ -1,6 +1,5 @@
 # Graph Paper Race Game #
 [![Build Status](https://travis-ci.org/NelsonCrosby/GraphPaperRaceGame.svg?branch=master)](https://travis-ci.org/NelsonCrosby/GraphPaperRaceGame)
-[Trello]
 
 GPRG is based off of a game traditionally played on grid paper. A track is
  drawn on a grid. A starting line is determined, and a number of 'vehicles' are
@@ -9,15 +8,13 @@ GPRG is based off of a game traditionally played on grid paper. A track is
  independently. The goal is to be the first to the finish line (which may also
  be the starting line in a circuit).
 
-[Trello]: https://trello.com/b/hrNlfIF5/graph-paper-race-game
 [Manhattan-units]: http://en.wikipedia.org/wiki/Taxicab_geometry
 
 
 ## Project ##
 
-This game will initially be implemented in Groovy using [Slick2D] 1.0.1. There
- is an official [Trello] board. Official IRC is [EsperNet]#gprg (because why
- not).
+This game will initially be implemented in Groovy using [Slick2D] 1.0.1.
+ Official IRC is [EsperNet]#gprg (because why not).
 
 [Slick2D]: http://slick.ninjacave.com/
 [EsperNet]: http://webchat.esper.net/
@@ -31,9 +28,8 @@ This game will initially be implemented in Groovy using [Slick2D] 1.0.1. There
         to 80 where possible.
     - Generated files have no limit, as that can sometimes get too tricky to
         manage.
-- Compiling should be relatively trivial for an IDE. That is - if your IDEs
-    built-in compiler can interpret Gradle dependencies, then it should be able
-    to compile without any extra configuration.
+- It should always be possible to create a standalone distribution JAR that
+    doesn't require any extra configuration on the part of the user.
 - Gradle must be used for resolving dependencies (including natives).
 - Doc-comment (`/** */`) everything.
     - Add an `@author` to any method or class you have contributed to.
@@ -60,11 +56,22 @@ It's gonna be this way, because Gradle prefers it like this. Also, it makes
 ### IDE setup ###
 
 - Import the project from `build.gradle`.
-- Run one of the `${platform}Natives` tasks provided by Gradle, in order to get
-    the appropriate set for your system (e.g. `$ gradle linuxNatives`)
 - Set the following in your run configurations:
     - Main class: `io.github.nelsoncrosby.gprg.GPRGame`
-    - VM Options: `-Dorg.lwjgl.librarypath=lib/natives-${platform}`
+- **Optional:** Use custom natives
+    - Run the Gradle task to get natives for your platform
+        - Windows: `gradle windowsNatives`
+        - Mac: `gradle osxNatives`
+        - Linux: `gradle linuxNatives`
+    - In your run configurations, set the VM option
+            `-Dorg.lwjgl.librarypath=lib/natives-<platform>`
+- **Optional:** Use custom input bindings
+    - Create a directory `junk` in the project root (it's already in gitignore)
+    - Create a file `junk/input.properties`
+    - Check `src/main/resources/io/github/nelsoncrosby/gprg/input.properties`
+            for a list of bindings you can use
+    - In your run configurations, set the VM option
+            `-Dio.github.nelsoncrosby.gprg.inputBindings=junk/input.properties`
 
 
 ### Creating a distribution ###
@@ -76,5 +83,8 @@ It's gonna be this way, because Gradle prefers it like this. Also, it makes
 
 ### Finding something to help with ###
 
-If you want to contribute, best thing to do would be to go to the Trello board,
- and look for an unassigned card. Then do the standard contribution thingy.
+If you want to contribute, check the [issue tracker]. Use the fork/pull-request
+ contribution method.
+
+
+[Issue tracker]: https://github.com/NelsonCrosby/GraphPaperRaceGame/issues
