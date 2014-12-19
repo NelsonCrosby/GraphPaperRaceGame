@@ -78,12 +78,13 @@ class Track {
     {
         ObjectInputStream trackInfoStream = new ObjectInputStream(source)
 
+        // Get the track info version
+        def trackInfoVersion = trackInfoStream.readInt()
         // Get the track info
-        def trackInfo = trackInfoStream.readObject() as TrackInfo
-        switch (trackInfo.version) {
-            case 1: info = trackInfo as TrackInfo.Version1; break
+        switch (trackInfoVersion) {
+            case 1: info = trackInfoStream.readObject() as TrackInfo.Version1; break
             default:
-                throw new TrackInfo.VersionNotSupportedException(trackInfo.version)
+                throw new TrackInfo.VersionNotSupportedException(trackInfoVersion)
         }
 
         // Parse track image

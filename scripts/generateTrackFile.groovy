@@ -105,6 +105,7 @@ new SwingBuilder().edt {
                     def png = new FileInputStream(pngFile)
                     def dest = new ObjectOutputStream(new FileOutputStream(destFile))
                     // Write track info
+                    dest.writeInt(1)
                     dest.writeObject(trackInfo)
                     // Write PNG data
                     StreamUtils.copyStreams(png, dest)

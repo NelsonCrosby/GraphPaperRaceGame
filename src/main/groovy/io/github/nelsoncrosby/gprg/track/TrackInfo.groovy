@@ -23,12 +23,8 @@ class TrackInfo implements Serializable {
 
     private static final long serialVersionUID = 0
 
-    /** TrackInfo version. Used to determine what version to cast to. */
-    int version
     static class Version1 extends TrackInfo {
         private static final long serialVersionUID = 1
-        /** TrackInfo version */
-        int version = 1
         /** The name of the track */
         String trackName
         /** The {@link Direction} the players should start moving in */
