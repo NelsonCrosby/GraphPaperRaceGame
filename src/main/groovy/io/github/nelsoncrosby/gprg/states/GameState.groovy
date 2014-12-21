@@ -145,12 +145,29 @@ class GameState extends BasicGameState {
             gx.drawString("Restarting in $remainingSeconds", 300, 20)
         } else {
             // Render current player's movement decisions
-            currentPlayer.renderNext(gx,
-                    camera.getScreenPos(
-                            currentPlayer.pos.copy().scale(
-                                    currentPlayer.gridSize)
+            currentPlayer.renderMovement(gx, camera, camera.getScreenPos(
+                            camera.getWorldPos(
+                                    currentPlayer.pos, currentPlayer.gridSize
+                            )
                     )
             )
+            currentPlayer.renderPath(gx, camera, camera.getScreenPos(
+                    camera.getWorldPos(
+                            currentPlayer.pos, currentPlayer.gridSize
+                    )
+                )
+            )
+        }
+        // Draw the paths of all dead players
+        for (Entity entity: entities) {
+            if (entity.getClass() == Player && entity.isCrashed) {
+                entity.renderPath(
+                        gx, camera,
+                        camera.getScreenPos(
+                                camera.getWorldPos(entity.pos, entity.gridSize)
+                        )
+                )
+            }
         }
         gx.color = Color.white
         // TODO: Remove this debugging code

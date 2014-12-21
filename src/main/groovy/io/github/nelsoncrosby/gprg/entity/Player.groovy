@@ -25,6 +25,8 @@ class Player extends Entity {
     boolean crossedFinish
     /** Holds acceleration of player for each turn */
     Vector2f accel = new Vector2f(0, 0)
+    /** Holds all prior coordinates */
+    List<Vector2f> prevCoordinates
 
     /**
      * Construct to a position on the grid.
@@ -37,6 +39,7 @@ class Player extends Entity {
      */
     Player(int gridSize, int startX, int startY) {
         super(gridSize, startX, startY)
+        prevCoordinates = []
     }
 
     /**
@@ -74,6 +77,11 @@ class Player extends Entity {
             }
             vel.add(accel)
             accel = new Vector2f(0, 0)
+
+            // Add to previous coordinates
+            if (vel.lengthSquared() > 0) {
+                prevCoordinates.add(0, pos.copy())
+            }
 
             Vector2f playerInitialPos = pos.copy()
             move(vel)
@@ -186,7 +194,7 @@ class Player extends Entity {
         }
     }
 
-    void renderNext(Graphics gx, Vector2f screenpos) {
+    void renderMovement(Graphics gx, Camera camera, Vector2f screenpos) {
         // Draw player's next location with no acceleration
         int x = screenpos.x - SIZE
         int y = screenpos.y - SIZE
@@ -204,6 +212,20 @@ class Player extends Entity {
         // Use half-transparency for the guide
         gx.color = new Color(color.r, color.g, color.b, 0.5f)
         gx.drawOval(x, y, SIZE*2, SIZE*2)
+    }
+    void renderPath(Graphics gx, Camera camera, Vector2f screenpos) {
+        // Draw previous locations
+        gx.color = new Color(color.r, color.b, color.g, 0.3)
+        for (Vector2f point: prevCoordinates) {
+            Vector2f sPos = camera.getScreenPos(
+                    camera.getWorldPos(point, gridSize)
+            )
+            gx.drawOval(
+                    sPos.x - SIZE as int,
+                    sPos.y - SIZE as int,
+                    SIZE*2, SIZE*2
+            )
+        }
     }
 
     /**
