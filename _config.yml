@@ -2,6 +2,7 @@
 title: Graph Paper Race Game
 description: ""
 github: https://github.com/NelsonCrosby/GraphPaperRaceGame
+baseurl: /project-name
 
 # Build settings
 markdown: kramdown
