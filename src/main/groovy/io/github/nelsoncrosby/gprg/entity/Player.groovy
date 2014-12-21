@@ -250,7 +250,7 @@ class Player extends Entity {
     }
 
     /** Queue of colours to cycle through when getting a new player */
-    private static Queue<Color> colorsCycle
+    private static List<Color> colorsCycle
     static { resetColors() /* Set the colours initially */ }
 
     /**
@@ -273,12 +273,11 @@ class Player extends Entity {
      *
      * @author Nelson Crosby
      */
-    static Player getNext(int startX = 0, int startY = 0) {
+    static Player getNext(int currentPlayersCount, int startX = 0, int startY = 0) {
         Player player = new Player(Track.CELL_WIDTH, startX, startY)
 
         // Cycle colours
-        player.color = colorsCycle.poll()
-        colorsCycle.offer(player.color)
+        player.color = colorsCycle[currentPlayersCount % colorsCycle.size()]
 
         return player
     }

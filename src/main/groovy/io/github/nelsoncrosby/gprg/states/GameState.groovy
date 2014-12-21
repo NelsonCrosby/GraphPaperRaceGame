@@ -10,6 +10,7 @@ import io.github.nelsoncrosby.gprg.track.Track
 import org.newdawn.slick.Color
 import org.newdawn.slick.GameContainer
 import org.newdawn.slick.Graphics
+import org.newdawn.slick.Input
 import org.newdawn.slick.SlickException
 import org.newdawn.slick.geom.Vector2f
 import org.newdawn.slick.state.BasicGameState
@@ -23,8 +24,6 @@ import org.newdawn.slick.state.StateBasedGame
  */
 @Log
 class GameState extends BasicGameState {
-    // TODO: Unhard-code this
-    int numPlayers = 3
     /** Provides a slightly nicer input binding system */
     BoundInput input
     /** Camera object controlling the screen */
@@ -95,7 +94,9 @@ class GameState extends BasicGameState {
                 accelRight  : { currentPlayer.accelerate(Direction.RIGHT) },
                 nextTurn    : { performTurn() },
                 nextTrack   : { nextTrack(gc, game) },
-                restart     : { game.enterState(getID()) }
+                restart     : { game.enterState(getID()) },
+                incPlayers  : { entities.add(nextPlayer) },
+                decPlayers  : { if (players.size() > 1) entities.remove(players[-1]) }
         ]
         input = new BoundInput(gc.input, pollBindings, eventBindings)
         trackID = 0
@@ -116,7 +117,7 @@ class GameState extends BasicGameState {
         isRestarting = false
 
         Player.resetColors()
-        genPlayers(numPlayers)
+        genPlayers(1)
 
         log.info 'Game started'
     }
@@ -125,7 +126,8 @@ class GameState extends BasicGameState {
     void leave(GameContainer container, StateBasedGame game) throws SlickException {
 
     }
-/**
+
+    /**
      * Render code.
      * Called about once every update (but let's not rely on this).
      *
@@ -160,7 +162,7 @@ class GameState extends BasicGameState {
         }
         // Draw the paths of all dead players
         for (Entity entity: entities) {
-            if (entity.getClass() == Player && entity.isCrashed) {
+            if (entity instanceof Player && entity.isCrashed) {
                 entity.renderPath(
                         gx, camera,
                         camera.getScreenPos(
@@ -200,7 +202,7 @@ class GameState extends BasicGameState {
                 if (entity.update(delta, track) /* Update entity */) {
                     // Entity requests game restart
                     restartCalls += 1
-                    if (restartCalls == numPlayers) {
+                    if (restartCalls == players.size()) {
                         // All players are asking for restart
                         log.fine 'Restart timer started'
                         isRestarting = true
@@ -237,11 +239,11 @@ class GameState extends BasicGameState {
         // This whole code segment would be nicer with a do-until loop
         int crashCount = 0
         playerID += 1
-        playerID %= numPlayers
-        while (entities[playerID].isCrashed && crashCount < numPlayers) {
+        playerID %= players.size()
+        while (players[playerID].isCrashed && crashCount < players.size()) {
             crashCount += 1
             playerID += 1
-            playerID %= numPlayers
+            playerID %= players.size()
         }
 
 
@@ -265,7 +267,7 @@ class GameState extends BasicGameState {
      * @author Nelson Crosby
      */
     Player getCurrentPlayer() {
-        return entities[playerID] as Player
+        return players[playerID] as Player
         // return entities.find { it instanceof Player } as Player
     }
 
@@ -277,10 +279,14 @@ class GameState extends BasicGameState {
      * @author Nelson Crosby
      */
     Player getNextPlayer() {
-        Vector2f pos = track.startLocations.poll()
+        Vector2f pos = track.startLocations[players.size() % track.startLocations.size()]
         return pos == null ? null /* Can't get a start position, so we don't
                                      know where we can put the player */
-                : Player.getNext(pos.x as int, pos.y as int)
+                : Player.getNext(players.size(), pos.x as int, pos.y as int)
+    }
+
+    List<Player> getPlayers() {
+        entities.findAll { it instanceof Player }
     }
 
     /**
