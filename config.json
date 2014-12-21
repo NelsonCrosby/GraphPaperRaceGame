@@ -1,0 +1,22 @@
+{
+  "name": "gprg-typicons",
+  "css_prefix_text": "typicon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "de5f0a564ccf8816325330e292e11533",
+      "css": "rss",
+      "code": 59393,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "0f6a2573a7b6df911ed199bb63717e27",
+      "css": "github-silhouette",
+      "code": 59392,
+      "src": "fontawesome"
+    }
+  ]
+}

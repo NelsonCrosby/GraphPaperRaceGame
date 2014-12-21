@@ -1,0 +1,9 @@
+# Site settings
+title: Graph Paper Race Game
+description: ""
+github: https://github.com/NelsonCrosby/GraphPaperRaceGame
+
+# Build settings
+markdown: kramdown
+permalink: pretty
+highlighter: pygments

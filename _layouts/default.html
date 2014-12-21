@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+    {% include head.html %}
+
+    <body>
+
+        {% include header.html %}
+        {% include navigation.html %}
+        {% include links.html %}
+
+        <div id="body">
+            <div id="content">
+                {{ content }}
+            </div>
+
+            <aside>
+                <ul id="posts">
+                    {% for post in site.posts %}
+                    <li>
+                        <span class="date">[ {{ post.date | date: "%b %-d, %Y" }} ]</span><br/>
+                        <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <p class="rss-subscribe"><a href="{{ '/feed.xml' | prepend: site.baseurl }}"><span class="typicon-rss"></span></a></p>
+            </aside>
+        </div>
+
+        {% include footer.html %}
+
+    </body>
+</html>
