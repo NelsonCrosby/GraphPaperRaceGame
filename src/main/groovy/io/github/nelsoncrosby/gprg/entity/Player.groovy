@@ -103,11 +103,13 @@ class Player extends Entity {
                 Vector2f finalDisp = pos.copy().sub(startLineFirst)
 
                 crossedFinish = false
-                int multiplier = track.info.startLineDirection.multiplier
-                if (track.info.startLineDirection.axis == Axis.X) {
+                Direction startDir = track.info.startLineDirection
+                int multiplier = startDir.multiplier
+                if (startDir.axis == Axis.X) {
                     // Start line is vertical
-                    if ((initialDisp.x * multiplier < 0 &&
-                            finalDisp.x * multiplier > 0)) {
+                    if (initialDisp.x * multiplier < 0 &&
+                            (startDir == Direction.RIGHT ? finalDisp.x
+                                    : finalDisp.x-1) * multiplier >= 0) {
                         // Player has crossed the finish line along X this turn
                         // Check that the player is in the correct Y range
                         if (pos.y >= startLineFirst.y-2 &&
@@ -118,7 +120,8 @@ class Player extends Entity {
                 } else {
                     // Start line is horizontal
                     if (initialDisp.y * multiplier < 0 &&
-                            finalDisp.y * multiplier > 0) {
+                            (startDir == Direction.DOWN ? finalDisp.y
+                                    : finalDisp.y-1) * multiplier >= 0) {
                         // Player has crossed the finish line along Y this turn
                         // Check that the player is in the correct X range
                         if (pos.x >= startLineFirst.x-2 &&
@@ -181,12 +184,6 @@ class Player extends Entity {
         if (!isCrashed) {
             // Draw player as circle
             gx.fillOval(x, y, SIZE*2, SIZE*2)
-
-            if (crossedFinish) {
-                // Player has won, tell them so
-                gx.color = Color.white
-                gx.drawString("A Winner is YOU!", 300, 20)
-            }
         } else {
             float x2 = screenPos.x + SIZE
             float y2 = screenPos.y + SIZE

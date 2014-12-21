@@ -162,13 +162,21 @@ class GameState extends BasicGameState {
         }
         // Draw the paths of all dead players
         for (Entity entity: entities) {
-            if (entity instanceof Player && entity.isCrashed) {
-                entity.renderPath(
-                        gx, camera,
-                        camera.getScreenPos(
-                                camera.getWorldPos(entity.pos, entity.gridSize)
-                        )
-                )
+            if (entity instanceof Player) {
+                if (entity.isCrashed) {
+                    entity.renderPath(
+                            gx, camera,
+                            camera.getScreenPos(
+                                    camera.getWorldPos(entity.pos, entity.gridSize)
+                            )
+                    )
+                } else if (entity.crossedFinish) {
+                    // Player has won, tell them so
+                    gx.color = Color.white
+                    def playerName = "Player ${players.indexOf(entity)+1}"
+                    if (players.size() == 1) playerName = "YOU"
+                    gx.drawString("A Winner is $playerName!", 300, 20)
+                }
             }
         }
         gx.color = Color.white
