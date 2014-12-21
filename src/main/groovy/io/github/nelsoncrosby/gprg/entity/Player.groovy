@@ -17,6 +17,8 @@ import static io.github.nelsoncrosby.gprg.Direction.Axis
 class Player extends Entity {
     /** The SIZE of the player when drawn */
     static final int SIZE = 6
+    /** The amount smaller than SIZE of the dots for possible movement */
+    static final int DOTSIZE = 5
     /** The current draw colour of the player */
     Color color
     /** Determines how the player is drawn, and whether or not it can move */
@@ -178,7 +180,7 @@ class Player extends Entity {
         float y = screenPos.y - SIZE
         if (!isCrashed) {
             // Draw player as circle
-            gx.drawOval(x, y, SIZE*2, SIZE*2)
+            gx.fillOval(x, y, SIZE*2, SIZE*2)
 
             if (crossedFinish) {
                 // Player has won, tell them so
@@ -195,15 +197,25 @@ class Player extends Entity {
     }
 
     void renderMovement(Graphics gx, Camera camera, Vector2f screenpos) {
-        // Draw player's next location with no acceleration
+        // Get player's next location with no acceleration
         int x = screenpos.x - SIZE
         int y = screenpos.y - SIZE
         x += vel.x * gridSize
         y += vel.y * gridSize
 
+        // Draw all nine possible movement points
         // Use half-transparency for the guide
-        gx.color = new Color(255, color.g, color.b, 0.75f)
-        gx.drawOval(x, y, SIZE*2, SIZE*2)
+        gx.color = new Color(color.r, color.g, color.b, 0.75f)
+        for (i in -1..1) {
+            for (j in -1..1) {
+                gx.drawOval(
+                        x + i*gridSize + DOTSIZE,
+                        y + j*gridSize + DOTSIZE,
+                        2*(SIZE-DOTSIZE),2*(SIZE-DOTSIZE)
+                )
+            }
+        }
+
 
         // Draw where the player will be if the next move occurs now
         x += accel.x * gridSize
@@ -211,7 +223,7 @@ class Player extends Entity {
 
         // Use half-transparency for the guide
         gx.color = new Color(color.r, color.g, color.b, 0.5f)
-        gx.drawOval(x, y, SIZE*2, SIZE*2)
+        gx.fillOval(x, y, SIZE*2, SIZE*2)
     }
     void renderPath(Graphics gx, Camera camera, Vector2f screenpos) {
         // Draw previous locations
