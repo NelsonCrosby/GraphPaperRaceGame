@@ -180,10 +180,10 @@ class GameState extends BasicGameState {
             }
         }
         gx.color = Color.white
-        // TODO: Remove this debugging code
-        gx.drawString(playerID as String, 20, 20)
-        gx.drawString(currentPlayer.pos as String, 20, 40)
-        gx.drawString(isRestarting as String, 20, 60)
+//        // TODO: Remove this debugging code
+//        gx.drawString(playerID as String, 20, 20)
+//        gx.drawString(currentPlayer.pos as String, 20, 40)
+//        gx.drawString(isRestarting as String, 20, 60)
     }
 
     /**
