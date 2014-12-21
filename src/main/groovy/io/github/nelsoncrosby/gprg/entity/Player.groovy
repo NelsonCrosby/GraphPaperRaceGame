@@ -82,7 +82,7 @@ class Player extends Entity {
 
             // Add to previous coordinates
             if (vel.lengthSquared() > 0) {
-                prevCoordinates.add(0, pos.copy())
+                prevCoordinates.add(pos.copy())
             }
 
             Vector2f playerInitialPos = pos.copy()
@@ -200,12 +200,16 @@ class Player extends Entity {
         // Get player's next location with no acceleration
         int x = screenpos.x - SIZE
         int y = screenpos.y - SIZE
+
+        // Create a ring around the currently active player
+        gx.color = new Color(color.r, color.g, color.b, 0.75f)
+        gx.drawOval(x-2, y-2, (SIZE+2)*2, (SIZE+2)*2)
+
         x += vel.x * gridSize
         y += vel.y * gridSize
 
         // Draw all nine possible movement points
         // Use half-transparency for the guide
-        gx.color = new Color(color.r, color.g, color.b, 0.75f)
         for (i in -1..1) {
             for (j in -1..1) {
                 gx.drawOval(
@@ -228,7 +232,11 @@ class Player extends Entity {
     void renderPath(Graphics gx, Camera camera, Vector2f screenpos) {
         // Draw previous locations
         gx.color = new Color(color.r, color.g, color.b, 0.3)
-        for (Vector2f point: prevCoordinates) {
+
+        // Draw line between all prior turn's locations
+        for (int i=1; i < prevCoordinates.size(); i++) {
+            Vector2f point = prevCoordinates[i]
+            Vector2f prevPoint = prevCoordinates[i-1]
             Vector2f sPos = camera.getScreenPos(
                     camera.getWorldPos(point, gridSize)
             )
@@ -237,6 +245,22 @@ class Player extends Entity {
                     sPos.y - SIZE as int,
                     SIZE*2, SIZE*2
             )
+            // Draw line between this and the previous point
+            Vector2f firstLineCoord = camera.getScreenPos(prevPoint, gridSize)
+            Vector2f secondLineCoord = camera.getScreenPos(point, gridSize)
+            gx.drawLine(
+                    firstLineCoord.x, firstLineCoord.y,
+                    secondLineCoord.x, secondLineCoord.y
+            )
+        }
+        if (prevCoordinates.size() > 0) {
+            Vector2f firstLineCoord = camera.getScreenPos(
+                    prevCoordinates[prevCoordinates.size()-1],
+                    gridSize)
+            Vector2f secondLineCoord = camera.getScreenPos(pos, gridSize)
+            gx.drawLine(
+                    firstLineCoord.x, firstLineCoord.y,
+                    secondLineCoord.x, secondLineCoord.y)
         }
     }
 

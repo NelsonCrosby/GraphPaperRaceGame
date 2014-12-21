@@ -63,7 +63,9 @@ class Camera {
                 worldPos.y - position.y as float
         )
     }
-
+    Vector2f getScreenPos(Vector2f gridPos, int gridSize) {
+        return getScreenPos(getWorldPos(gridPos, gridSize))
+    }
     /** Get world position from grid coordinates
      *
      * @author Riley Steyn
