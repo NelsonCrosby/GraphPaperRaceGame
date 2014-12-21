@@ -92,6 +92,10 @@ class GPRGame extends StateBasedGame {
             // point to an absolute path
             System.setProperty(libPathProp, new File(libPath).absolutePath)
         }
+        if (Sys.SYSTEM == Sys.MAC) {
+            // Natives might be broken, try to fix
+            fixOsxNatives(new File(System.getProperty(libPathProp)))
+        }
 
         startGame()
     }
@@ -147,5 +151,18 @@ class GPRGame extends StateBasedGame {
 
         // Set the natives directory
         System.setProperty('org.lwjgl.librarypath', Sys.getPrivateFile(APP_NAME, 'natives').absolutePath)
+    }
+
+    /**
+     * Hack to get LWJGL natives working correctly on Mac
+     *
+     * @param nativesDir The directory that the natives exist in
+     */
+    private static void fixOsxNatives(File nativesDir) {
+        File oldLibLwjgl = new File(nativesDir, "liblwjgl.jnilib"),
+                newLibLwjgl = new File(nativesDir, "liblwjgl.dylib")
+        if (!newLibLwjgl.exists() && oldLibLwjgl.exists()) {
+            oldLibLwjgl.renameTo(newLibLwjgl)
+        } else {/* Shouldn't ever happen if natives configured correctly */}
     }
 }
