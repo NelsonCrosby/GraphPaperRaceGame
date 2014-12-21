@@ -215,7 +215,7 @@ class Player extends Entity {
     }
     void renderPath(Graphics gx, Camera camera, Vector2f screenpos) {
         // Draw previous locations
-        gx.color = new Color(color.r, color.b, color.g, 0.3)
+        gx.color = new Color(color.r, color.g, color.b, 0.3)
         for (Vector2f point: prevCoordinates) {
             Vector2f sPos = camera.getScreenPos(
                     camera.getWorldPos(point, gridSize)
