@@ -17,13 +17,10 @@ import static io.github.nelsoncrosby.gprg.Direction.Axis
 class Player extends Entity {
     /** The SIZE of the player when drawn */
     static final int SIZE = 6
-    /** The time (in ms) to wait for respawn */
-    private static final int RESPAWN_WAIT_TIME = 2000
     /** The current draw colour of the player */
     Color color
     /** Determines how the player is drawn, and whether or not it can move */
-    boolean onTrack = true
-    // TODO: Remove this variable
+    boolean isCrashed = false
     /** Holds whether the player has crossed the finish line this turn */
     boolean crossedFinish
     /** Holds acceleration of player for each turn */
@@ -53,12 +50,8 @@ class Player extends Entity {
      */
     @Override
     boolean update(int delta, Track track) {
-        if (!onTrack) /* Crashed, should restart soon */ {
-            resetTimer += delta
-            if (resetTimer >= RESPAWN_WAIT_TIME) /* Ready to restart */ {
-                resetTimer = 0
-                return true // We want to restart the game
-            }
+        if (isCrashed) /* Crashed, should restart soon */ {
+            return true // We want to restart the game
         }
         return false // No restarting
     }
@@ -74,18 +67,23 @@ class Player extends Entity {
      */
     void performTurn(Track track) {
 
-        if (onTrack && !crossedFinish) {
+        if (!isCrashed && !crossedFinish) {
+            if (!hasMoved && vel.lengthSquared() > 0) {
+                // The player has now moved
+                hasMoved = true;
+            }
             vel.add(accel)
-
             accel = new Vector2f(0, 0)
 
             Vector2f playerInitialPos = pos.copy()
             move(vel)
 
             // Check that player is still on track
-            onTrack = track.isOnTrack(this)
-
-            if (!firstTurn && onTrack) /* Cannot win if also crashed */ {
+            if (!isCrashed) {
+                // Check if the player has crashed
+                isCrashed = !track.isOnTrack(this)
+            }
+            if (hasMoved && !isCrashed) /* Cannot win if also crashed */ {
                 // Check whether the player has crossed the finish line
                 Vector2f startLineFirst = track.startLocations.peekFirst()
                 Vector2f startLineLast = track.startLocations.peekLast()
@@ -98,8 +96,8 @@ class Player extends Entity {
                 int multiplier = track.info.startLineDirection.multiplier
                 if (track.info.startLineDirection.axis == Axis.X) {
                     // Start line is vertical
-                    if ((initialDisp.x * multiplier <= 0 &&
-                            finalDisp.x * multiplier >= 0)) {
+                    if ((initialDisp.x * multiplier < 0 &&
+                            finalDisp.x * multiplier > 0)) {
                         // Player has crossed the finish line along X this turn
                         // Check that the player is in the correct Y range
                         if (pos.y >= startLineFirst.y-2 &&
@@ -109,8 +107,8 @@ class Player extends Entity {
                     }
                 } else {
                     // Start line is horizontal
-                    if (initialDisp.y * multiplier <= 0 &&
-                            finalDisp.y * multiplier >= 0) {
+                    if (initialDisp.y * multiplier < 0 &&
+                            finalDisp.y * multiplier > 0) {
                         // Player has crossed the finish line along Y this turn
                         // Check that the player is in the correct X range
                         if (pos.x >= startLineFirst.x-2 &&
@@ -120,11 +118,9 @@ class Player extends Entity {
                     }
                 }
             }
-
-            firstTurn = false
         }
     }
-    private boolean firstTurn = true
+    private boolean hasMoved = false
 
     /**
      * Move the player by the given distance.
@@ -172,7 +168,7 @@ class Player extends Entity {
         gx.color = color
         float x = screenPos.x - SIZE
         float y = screenPos.y - SIZE
-        if (onTrack) {
+        if (!isCrashed) {
             // Draw player as circle
             gx.drawOval(x, y, SIZE*2, SIZE*2)
 
@@ -180,22 +176,6 @@ class Player extends Entity {
                 // Player has won, tell them so
                 gx.color = Color.white
                 gx.drawString("A Winner is YOU!", 300, 20)
-            } else {
-                // Draw where player's next location with no acceleration
-                x += vel.x * gridSize
-                y += vel.y * gridSize
-
-                // Use half-transparency for the guide
-                gx.color = new Color(255, color.g, color.b, 0.75f)
-                gx.drawOval(x, y, SIZE*2, SIZE*2)
-
-                // Draw where the player will be if the next move occurs now
-                x += accel.x * gridSize
-                y += accel.y * gridSize
-
-                // Use half-transparency for the guide
-                gx.color = new Color(color.r, color.g, color.b, 0.5f)
-                gx.drawOval(x, y, SIZE*2, SIZE*2)
             }
         } else {
             float x2 = screenPos.x + SIZE
@@ -203,14 +183,37 @@ class Player extends Entity {
             // Crashed, draw a cross
             gx.drawLine(x, y, x2, y2)  // Draw \ line
             gx.drawLine(x2, y, x, y2)  // Swap x to draw / line
-
-            // Restarting soon, draw restart timer
-            gx.color = Color.white
-            def remainingSeconds = (RESPAWN_WAIT_TIME - resetTimer) / 1000
-            gx.drawString("Restarting in $remainingSeconds", 300, 20)
         }
     }
 
+    void renderNext(Graphics gx, Vector2f screenpos) {
+        // Draw player's next location with no acceleration
+        int x = screenpos.x - SIZE
+        int y = screenpos.y - SIZE
+        x += vel.x * gridSize
+        y += vel.y * gridSize
+
+        // Use half-transparency for the guide
+        gx.color = new Color(255, color.g, color.b, 0.75f)
+        gx.drawOval(x, y, SIZE*2, SIZE*2)
+
+        // Draw where the player will be if the next move occurs now
+        x += accel.x * gridSize
+        y += accel.y * gridSize
+
+        // Use half-transparency for the guide
+        gx.color = new Color(color.r, color.g, color.b, 0.5f)
+        gx.drawOval(x, y, SIZE*2, SIZE*2)
+    }
+
+    /**
+     * Sets the player state to crashed
+     *
+     * @author Riley Steyn
+     */
+    void crashPlayer() {
+        isCrashed = true
+    }
 
     /** Queue of colours to cycle through when getting a new player */
     private static Queue<Color> colorsCycle

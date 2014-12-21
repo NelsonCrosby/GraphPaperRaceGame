@@ -23,6 +23,8 @@ import org.newdawn.slick.state.StateBasedGame
  */
 @Log
 class GameState extends BasicGameState {
+    // TODO: Unhard-code this
+    int numPlayers = 3
     /** Provides a slightly nicer input binding system */
     BoundInput input
     /** Camera object controlling the screen */
@@ -37,6 +39,15 @@ class GameState extends BasicGameState {
     ]
     /** Active entities */
     List<Entity> entities
+    /** Player variables */
+    int playerID
+    // State-specific variables
+    /** Holds whether the state is to be restarted soon */
+    boolean isRestarting
+    /** Holds time left until restart */
+    float remainingSeconds
+    /** The time (in ms) to wait for respawn */
+    private static final int RESPAWN_WAIT_TIME = 2000
     /** A game-unique ID for this state */
     final UUID stateID = UUID.randomUUID()
 
@@ -82,7 +93,7 @@ class GameState extends BasicGameState {
                 accelDown   : { currentPlayer.accelerate(Direction.DOWN)  },
                 accelLeft   : { currentPlayer.accelerate(Direction.LEFT)  },
                 accelRight  : { currentPlayer.accelerate(Direction.RIGHT) },
-                nextTurn    : { currentPlayer.performTurn(track) },
+                nextTurn    : { performTurn() },
                 nextTrack   : { nextTrack(gc, game) },
                 restart     : { game.enterState(getID()) }
         ]
@@ -100,13 +111,21 @@ class GameState extends BasicGameState {
         log.fine 'Constructing resources'
         track = new Track(tracks.get(trackID), Track)
         camera = new Camera(gc, new Vector2f(45*12, -15*12))
+        entities = []
+        playerID = 0
+        isRestarting = false
+
         Player.resetColors()
-        entities = [nextPlayer]
+        genPlayers(numPlayers)
 
         log.info 'Game started'
     }
 
-    /**
+    @Override
+    void leave(GameContainer container, StateBasedGame game) throws SlickException {
+
+    }
+/**
      * Render code.
      * Called about once every update (but let's not rely on this).
      *
@@ -120,9 +139,24 @@ class GameState extends BasicGameState {
     void render(GameContainer gc, StateBasedGame game, Graphics gx) throws SlickException {
         track.render(gx, camera)
         entities.each { it.render(gx, camera) }
+        if (isRestarting) {
+            // If the game is to be restarted, draw timer
+            gx.color = Color.white
+            gx.drawString("Restarting in $remainingSeconds", 300, 20)
+        } else {
+            // Render current player's movement decisions
+            currentPlayer.renderNext(gx,
+                    camera.getScreenPos(
+                            currentPlayer.pos.copy().scale(
+                                    currentPlayer.gridSize)
+                    )
+            )
+        }
         gx.color = Color.white
-        gx.drawString(currentPlayer.crossedFinish as String, 20, 20)
+        // TODO: Remove this debugging code
+        gx.drawString(playerID as String, 20, 20)
         gx.drawString(currentPlayer.pos as String, 20, 40)
+        gx.drawString(isRestarting as String, 20, 60)
     }
 
     /**
@@ -138,13 +172,63 @@ class GameState extends BasicGameState {
     @Override
     void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException {
         input.test(delta)
-        for (Entity entity : entities) {
-            if (entity.update(delta, track) /* Update entity */) {
-                // Entity requests game to restart
-                game.enterState(getID())
-                break // Stop updating entities
+        if (isRestarting) {
+            remainingSeconds -= delta
+            if (remainingSeconds <= 0) {
+                game.enterState(getID())  // Restart state
+            }
+        } else {
+            int restartCalls = 0  // Number of entities asking for restart
+            for (Entity entity : entities) {
+                if (entity.update(delta, track) /* Update entity */) {
+                    // Entity requests game restart
+                    restartCalls += 1
+                    log.info "restartCalls : $restartCalls"
+                    if (restartCalls == numPlayers) {
+                        // All players are asking for restart
+                        log.info 'Restart timer started'
+                        isRestarting = true
+                        remainingSeconds = RESPAWN_WAIT_TIME
+                    }
+                }
             }
         }
+    }
+
+    /**
+     * Performs current player's turn, moves to next player
+     *
+     * @author Riley Steyn
+     */
+    void performTurn() {
+        currentPlayer.performTurn(track)
+
+        // Kills current player if collision
+        for (i in 0..entities.size()-1) {
+            Entity entity = entities.get(i)
+            if (entity.getClass() == Player) {
+                // Only players may collide
+                if (entity.pos == currentPlayer.pos && i != playerID) {
+                    // The player is at the same position as another,
+                    // both have crashed
+                    entity.crashPlayer()
+                    currentPlayer.crashPlayer()
+                }
+            }
+        }
+
+        // Iterate to next non-crashed player
+        // This whole code segment would be nicer with a do-until loop
+        int crashCount = 0
+        playerID += 1
+        playerID %= numPlayers
+        while (entities[playerID].isCrashed && crashCount < numPlayers) {
+            crashCount += 1
+            playerID += 1
+            playerID %= numPlayers
+        }
+
+
     }
 
     // Input methods
@@ -165,7 +249,8 @@ class GameState extends BasicGameState {
      * @author Nelson Crosby
      */
     Player getCurrentPlayer() {
-        return entities.reverse().find { it instanceof Player } as Player
+        return entities[playerID] as Player
+        // return entities.find { it instanceof Player } as Player
     }
 
     /**
@@ -180,6 +265,19 @@ class GameState extends BasicGameState {
         return pos == null ? null /* Can't get a start position, so we don't
                                      know where we can put the player */
                 : Player.getNext(pos.x as int, pos.y as int)
+    }
+
+    /**
+     * Populates entities list with players
+     * @param numOfPlayers number of players to be added.
+     *
+     * @author Riley Steyn
+     */
+    void genPlayers(int numOfPlayers) {
+        log.info 'Generating players'
+        for (i in 0..numOfPlayers-1) {
+            entities.add(nextPlayer)
+        }
     }
 
     /**

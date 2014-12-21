@@ -44,7 +44,6 @@ class GPRGame extends StateBasedGame {
         super(CONST.TITLE)
     }
 
-
     /**
      * Initialise the list of states making up this game
      *
