@@ -183,10 +183,9 @@ class GameState extends BasicGameState {
                 if (entity.update(delta, track) /* Update entity */) {
                     // Entity requests game restart
                     restartCalls += 1
-                    log.info "restartCalls : $restartCalls"
                     if (restartCalls == numPlayers) {
                         // All players are asking for restart
-                        log.info 'Restart timer started'
+                        log.fine 'Restart timer started'
                         isRestarting = true
                         remainingSeconds = RESPAWN_WAIT_TIME
                     }
