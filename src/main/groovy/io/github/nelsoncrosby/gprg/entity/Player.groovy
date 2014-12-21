@@ -281,7 +281,8 @@ class Player extends Entity {
      */
     static void resetColors() {
         colorsCycle = new LinkedList<>([
-                Color.blue, Color.red, Color.green
+                Color.blue, Color.red, Color.green, Color.orange,
+                Color.cyan, Color.yellow
         ])
     }
     /**
