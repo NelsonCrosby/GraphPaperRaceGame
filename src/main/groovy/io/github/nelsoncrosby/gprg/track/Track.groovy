@@ -16,7 +16,7 @@ import org.newdawn.slick.geom.Vector2f
  */
 class Track {
     /** The width of each cell on the screen (px) */
-    static final int CELL_WIDTH = 12;
+    public static final int CELL_WIDTH = 12;
     private static final Vector2f CELL_WIDTH_VECT = new Vector2f(CELL_WIDTH, CELL_WIDTH)
 
     // Track properties

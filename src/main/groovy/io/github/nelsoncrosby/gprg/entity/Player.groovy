@@ -18,9 +18,9 @@ import static io.github.nelsoncrosby.gprg.Direction.Axis
  */
 class Player extends Entity {
     /** The SIZE of the player when drawn */
-    static final int SIZE = 6
+    public static final int SIZE = 6
     /** The amount smaller than SIZE of the dots for possible movement */
-    static final int DOTSIZE = 5
+    public static final int DOTSIZE = 5
     /** The current draw colour of the player */
     Color color
     /** Determines how the player is drawn, and whether or not it can move */

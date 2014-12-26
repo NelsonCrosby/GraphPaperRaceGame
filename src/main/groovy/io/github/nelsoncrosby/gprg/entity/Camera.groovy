@@ -25,8 +25,8 @@ class Camera {
     /** Holds half the (width, height) of screen */
     Vector2f halfSize
     float zoom = 1
-    static final float DEFAULT_ZOOM_FACTOR = 1.75
-    static final float DEFAULT_ZOOM_OUT_FACTOR = 1 / DEFAULT_ZOOM_FACTOR
+    public static final float DEFAULT_ZOOM_FACTOR = 1.75
+    public static final float DEFAULT_ZOOM_OUT_FACTOR = 1 / DEFAULT_ZOOM_FACTOR
 
     /**
      * Construct the camera.
