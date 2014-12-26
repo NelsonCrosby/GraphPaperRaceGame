@@ -10,7 +10,6 @@ import io.github.nelsoncrosby.gprg.track.Track
 import org.newdawn.slick.Color
 import org.newdawn.slick.GameContainer
 import org.newdawn.slick.Graphics
-import org.newdawn.slick.Input
 import org.newdawn.slick.SlickException
 import org.newdawn.slick.geom.Vector2f
 import org.newdawn.slick.state.BasicGameState
@@ -96,7 +95,10 @@ class GameState extends BasicGameState {
                 nextTrack   : { nextTrack(gc, game) },
                 restart     : { game.enterState(getID()) },
                 incPlayers  : { entities.add(nextPlayer) },
-                decPlayers  : { if (players.size() > 1) entities.remove(players[-1]) }
+                decPlayers  : { if (players.size() > 1) entities.remove(players[-1]) },
+                zoomIn      : { camera.adjustZoom(Camera.DEFAULT_ZOOM_FACTOR) },
+                zoomOut     : { camera.adjustZoom(Camera.DEFAULT_ZOOM_OUT_FACTOR) },
+                zoomReset   : { camera.resetZoom() }
         ]
         input = new BoundInput(gc.input, pollBindings, eventBindings)
         trackID = 0
@@ -147,17 +149,9 @@ class GameState extends BasicGameState {
             gx.drawString("Restarting in $remainingSeconds", 300, 20)
         } else {
             // Render current player's movement decisions
-            currentPlayer.renderMovement(gx, camera, camera.getScreenPos(
-                            camera.getWorldPos(
-                                    currentPlayer.pos, currentPlayer.gridSize
-                            )
-                    )
+            currentPlayer.renderMovement(gx, camera
             )
-            currentPlayer.renderPath(gx, camera, camera.getScreenPos(
-                    camera.getWorldPos(
-                            currentPlayer.pos, currentPlayer.gridSize
-                    )
-                )
+            currentPlayer.renderPath(gx, camera
             )
         }
         // Draw the paths of all dead players
@@ -165,10 +159,7 @@ class GameState extends BasicGameState {
             if (entity instanceof Player) {
                 if (entity.isCrashed) {
                     entity.renderPath(
-                            gx, camera,
-                            camera.getScreenPos(
-                                    camera.getWorldPos(entity.pos, entity.gridSize)
-                            )
+                            gx, camera
                     )
                 } else if (entity.crossedFinish) {
                     // Player has won, tell them so

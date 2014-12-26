@@ -4,6 +4,8 @@ import io.github.nelsoncrosby.gprg.Direction
 import io.github.nelsoncrosby.gprg.track.Track
 import org.newdawn.slick.Color
 import org.newdawn.slick.Graphics
+import org.newdawn.slick.geom.Circle
+import org.newdawn.slick.geom.Line
 import org.newdawn.slick.geom.Vector2f
 
 import static io.github.nelsoncrosby.gprg.Direction.Axis
@@ -193,25 +195,27 @@ class Player extends Entity {
         }
     }
 
-    void renderMovement(Graphics gx, Camera camera, Vector2f screenpos) {
+    void renderMovement(Graphics gx, Camera camera) {
         // Get player's next location with no acceleration
-        int x = screenpos.x - SIZE
-        int y = screenpos.y - SIZE
+        Vector2f screenPos = camera.getScreenPos(pos, gridSize)
+        float screenUnit = camera.zoom * gridSize
+        int x = screenPos.x - SIZE
+        int y = screenPos.y - SIZE
 
         // Create a ring around the currently active player
         gx.color = new Color(color.r, color.g, color.b, 0.75f)
         gx.drawOval(x-2, y-2, (SIZE+2)*2, (SIZE+2)*2)
 
-        x += vel.x * gridSize
-        y += vel.y * gridSize
+        x += vel.x * screenUnit
+        y += vel.y * screenUnit
 
         // Draw all nine possible movement points
         // Use half-transparency for the guide
         for (i in -1..1) {
             for (j in -1..1) {
                 gx.drawOval(
-                        x + i*gridSize + DOTSIZE,
-                        y + j*gridSize + DOTSIZE,
+                        (float) x + i*screenUnit + DOTSIZE,
+                        (float) y + j*screenUnit + DOTSIZE,
                         2*(SIZE-DOTSIZE),2*(SIZE-DOTSIZE)
                 )
             }
@@ -219,16 +223,16 @@ class Player extends Entity {
 
 
         // Draw where the player will be if the next move occurs now
-        x += accel.x * gridSize
-        y += accel.y * gridSize
+        x += accel.x * screenUnit
+        y += accel.y * screenUnit
 
         // Use half-transparency for the guide
         gx.color = new Color(color.r, color.g, color.b, 0.5f)
         gx.fillOval(x, y, SIZE*2, SIZE*2)
     }
-    void renderPath(Graphics gx, Camera camera, Vector2f screenpos) {
+    void renderPath(Graphics gx, Camera camera) {
         // Draw previous locations
-        gx.color = new Color(color.r, color.g, color.b, 0.3)
+        gx.color = new Color(color.r, color.g, color.b, 0.3f)
 
         // Draw line between all prior turn's locations
         for (int i=1; i < prevCoordinates.size(); i++) {
@@ -257,7 +261,8 @@ class Player extends Entity {
             Vector2f secondLineCoord = camera.getScreenPos(pos, gridSize)
             gx.drawLine(
                     firstLineCoord.x, firstLineCoord.y,
-                    secondLineCoord.x, secondLineCoord.y)
+                    secondLineCoord.x, secondLineCoord.y
+            )
         }
     }
 

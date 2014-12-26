@@ -17,6 +17,7 @@ import org.newdawn.slick.geom.Vector2f
 class Track {
     /** The width of each cell on the screen (px) */
     static final int CELL_WIDTH = 12;
+    private static final Vector2f CELL_WIDTH_VECT = new Vector2f(CELL_WIDTH, CELL_WIDTH)
 
     // Track properties
     Image trackDef
@@ -159,9 +160,6 @@ class Track {
      * @author Riley Steyn
      */
     void render(Graphics gx, Camera camera) {
-        gx.drawImage(trackDef, -camera.position.x, -camera.position.y,
-                (trackDef.width*CELL_WIDTH)-camera.position.x as int,
-                (trackDef.height*CELL_WIDTH)-camera.position.y as int,
-                0, 0, trackDef.width, trackDef.height)
+        camera.draw(gx, trackDef, camera.position.negate(), CELL_WIDTH_VECT)
     }
 }
