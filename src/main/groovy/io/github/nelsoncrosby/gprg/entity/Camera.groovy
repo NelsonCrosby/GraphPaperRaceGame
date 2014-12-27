@@ -1,14 +1,10 @@
 package io.github.nelsoncrosby.gprg.entity
 
 import io.github.nelsoncrosby.gprg.Direction
-import org.newdawn.slick.Color
 import org.newdawn.slick.GameContainer
 import org.newdawn.slick.Graphics
 import org.newdawn.slick.Image
-import org.newdawn.slick.ShapeFill
-import org.newdawn.slick.fills.GradientFill
 import org.newdawn.slick.geom.Rectangle
-import org.newdawn.slick.geom.Shape
 import org.newdawn.slick.geom.Vector2f
 
 /**
@@ -74,16 +70,7 @@ class Camera {
         )
     }
     Vector2f getScreenPos(Vector2f gridPos, int gridSize) {
-        return getScreenPos(getWorldPos(gridPos, gridSize))
-    }
-
-    /**
-     * Get world position from grid coordinates
-     *
-     * @author Riley Steyn
-     */
-    Vector2f getWorldPos(Vector2f gridPos, int gridSize) {
-        return gridPos.copy().scale(gridSize)
+        return getScreenPos(Entity.getWorldPos(gridPos, gridSize))
     }
 
     /**
@@ -137,6 +124,14 @@ class Camera {
     void adjustZoom(float factor) {
         zoom *= factor
         position.add(halfSize).scale(factor).sub(halfSize)
+    }
+
+    void centerOn(Vector2f newCenter) {
+        position = newCenter.copy().scale(zoom).sub(halfSize)
+    }
+
+    void centerOn(Entity newCenter) {
+        centerOn(newCenter.worldPos)
     }
 
     /**

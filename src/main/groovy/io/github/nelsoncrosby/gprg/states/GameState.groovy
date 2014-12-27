@@ -99,7 +99,8 @@ class GameState extends BasicGameState {
                 zoomIn      : { camera.adjustZoom(Camera.DEFAULT_ZOOM_FACTOR) },
                 zoomOut     : { camera.adjustZoom(Camera.DEFAULT_ZOOM_OUT_FACTOR) },
                 zoomReset   : { camera.resetZoom() },
-                toggleGrid  : { track.toggleGrid() }
+                toggleGrid  : { track.toggleGrid() },
+                snapCamera  : { camera.centerOn(currentPlayer) }
         ]
         input = new BoundInput(gc.input, pollBindings, eventBindings)
         trackID = 0
@@ -121,6 +122,7 @@ class GameState extends BasicGameState {
 
         Player.resetColors()
         genPlayers(1)
+        camera.centerOn(currentPlayer)
 
         log.info 'Game started'
     }
@@ -174,7 +176,7 @@ class GameState extends BasicGameState {
         gx.color = Color.white
 //        // TODO: Remove this debugging code
 //        gx.drawString(playerID as String, 20, 20)
-//        gx.drawString(currentPlayer.pos as String, 20, 40)
+//        gx.drawString(currentPlayer.gridPos as String, 20, 40)
 //        gx.drawString(isRestarting as String, 20, 60)
     }
 
@@ -224,9 +226,9 @@ class GameState extends BasicGameState {
         // Kills current player if collision
         for (i in 0..entities.size()-1) {
             Entity entity = entities.get(i)
-            if (entity.getClass() == Player) {
+            if (entity instanceof Player) {
                 // Only players may collide
-                if (entity.pos == currentPlayer.pos && i != playerID) {
+                if (entity.gridPos == currentPlayer.gridPos && i != playerID) {
                     // The player is at the same position as another,
                     // both have crashed
                     entity.crashPlayer()
@@ -238,15 +240,17 @@ class GameState extends BasicGameState {
         // Iterate to next non-crashed player
         // This whole code segment would be nicer with a do-until loop
         int crashCount = 0
+        incrementPlayer()
+        while (currentPlayer.isCrashed && crashCount < players.size()) {
+            crashCount += 1
+            incrementPlayer()
+        }
+    }
+
+    private void incrementPlayer() {
         playerID += 1
         playerID %= players.size()
-        while (players[playerID].isCrashed && crashCount < players.size()) {
-            crashCount += 1
-            playerID += 1
-            playerID %= players.size()
-        }
-
-
+        camera.centerOn(currentPlayer)
     }
 
     // Input methods
@@ -267,7 +271,7 @@ class GameState extends BasicGameState {
      * @author Nelson Crosby
      */
     Player getCurrentPlayer() {
-        return players[playerID] as Player
+        players[playerID]
         // return entities.find { it instanceof Player } as Player
     }
 

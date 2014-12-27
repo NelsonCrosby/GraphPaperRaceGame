@@ -4,8 +4,6 @@ import io.github.nelsoncrosby.gprg.Direction
 import io.github.nelsoncrosby.gprg.track.Track
 import org.newdawn.slick.Color
 import org.newdawn.slick.Graphics
-import org.newdawn.slick.geom.Circle
-import org.newdawn.slick.geom.Line
 import org.newdawn.slick.geom.Vector2f
 
 import static io.github.nelsoncrosby.gprg.Direction.Axis
@@ -84,10 +82,10 @@ class Player extends Entity {
 
             // Add to previous coordinates
             if (vel.lengthSquared() > 0) {
-                prevCoordinates.add(pos.copy())
+                prevCoordinates.add(gridPos.copy())
             }
 
-            Vector2f playerInitialPos = pos.copy()
+            Vector2f playerInitialPos = gridPos.copy()
             move(vel)
 
             // Check that player is still on track
@@ -102,7 +100,7 @@ class Player extends Entity {
                 // Holds player displacement from the start line point initially
                 Vector2f initialDisp = playerInitialPos.sub(startLineFirst)
                 // Holds player displacement from the start line point after moving
-                Vector2f finalDisp = pos.copy().sub(startLineFirst)
+                Vector2f finalDisp = gridPos.copy().sub(startLineFirst)
 
                 crossedFinish = false
                 Direction startDir = track.info.startLineDirection
@@ -114,8 +112,8 @@ class Player extends Entity {
                                     : finalDisp.x-1) * multiplier >= 0) {
                         // Player has crossed the finish line along X this turn
                         // Check that the player is in the correct Y range
-                        if (pos.y >= startLineFirst.y-2 &&
-                                pos.y <= startLineLast.y+1) {
+                        if (gridPos.y >= startLineFirst.y-2 &&
+                                gridPos.y <= startLineLast.y+1) {
                             crossedFinish = true
                         }
                     }
@@ -126,8 +124,8 @@ class Player extends Entity {
                                     : finalDisp.y-1) * multiplier >= 0) {
                         // Player has crossed the finish line along Y this turn
                         // Check that the player is in the correct X range
-                        if (pos.x >= startLineFirst.x-2 &&
-                                pos.x <= startLineLast.x+1) {
+                        if (gridPos.x >= startLineFirst.x-2 &&
+                                gridPos.x <= startLineLast.x+1) {
                             crossedFinish = true
                         }
                     }
@@ -145,7 +143,7 @@ class Player extends Entity {
      * @author Riley Steyn
      */
     void move(Vector2f distance) {
-        pos.add(distance)
+        gridPos.add(distance)
     }
 
     /**
@@ -197,7 +195,7 @@ class Player extends Entity {
 
     void renderMovement(Graphics gx, Camera camera) {
         // Get player's next location with no acceleration
-        Vector2f screenPos = camera.getScreenPos(pos, gridSize)
+        Vector2f screenPos = camera.getScreenPos(gridPos, gridSize)
         float screenUnit = camera.zoom * gridSize
         int x = screenPos.x - SIZE
         int y = screenPos.y - SIZE
@@ -239,7 +237,7 @@ class Player extends Entity {
             Vector2f point = prevCoordinates[i]
             Vector2f prevPoint = prevCoordinates[i-1]
             Vector2f sPos = camera.getScreenPos(
-                    camera.getWorldPos(point, gridSize)
+                    getWorldPos(point, gridSize)
             )
             gx.drawOval(
                     sPos.x - SIZE as int,
@@ -258,7 +256,7 @@ class Player extends Entity {
             Vector2f firstLineCoord = camera.getScreenPos(
                     prevCoordinates[prevCoordinates.size()-1],
                     gridSize)
-            Vector2f secondLineCoord = camera.getScreenPos(pos, gridSize)
+            Vector2f secondLineCoord = camera.getScreenPos(gridPos, gridSize)
             gx.drawLine(
                     firstLineCoord.x, firstLineCoord.y,
                     secondLineCoord.x, secondLineCoord.y

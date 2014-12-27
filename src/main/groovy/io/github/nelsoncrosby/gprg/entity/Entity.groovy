@@ -12,7 +12,7 @@ import org.newdawn.slick.geom.Vector2f
  */
 abstract class Entity {
     /** Current position in grid */
-    Vector2f pos
+    Vector2f gridPos
     /** Current velocity in grid-units */
     Vector2f vel
     /** Size (in pixels) of each cell on the screen */
@@ -30,8 +30,21 @@ abstract class Entity {
      */
     Entity(int gridSize = 1, int startX = 0, int startY = 0) {
         this.gridSize = gridSize
-        this.pos = new Vector2f(startX, startY)
+        this.gridPos = new Vector2f(startX, startY)
         this.vel = new Vector2f(0, 0)
+    }
+
+    /**
+     * Get world position from grid coordinates
+     *
+     * @author Riley Steyn
+     */
+    static Vector2f getWorldPos(Vector2f gridPos, int gridSize) {
+        gridPos.copy().scale(gridSize)
+    }
+
+    Vector2f getWorldPos() {
+        getWorldPos(gridPos, gridSize)
     }
 
     /**
@@ -53,7 +66,7 @@ abstract class Entity {
      * @author Nelson Crosby
      */
     void render(Graphics gx, Camera camera) {
-        render(gx, camera.getScreenPos(pos.copy().scale(gridSize)))
+        render(gx, camera.getScreenPos(gridPos.copy().scale(gridSize)))
     }
 
     /**

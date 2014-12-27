@@ -141,7 +141,7 @@ class Track {
      * @author Riley Steyn
      */
     boolean isOnTrack(Entity entity) {
-        Vector2f pos = entity.pos
+        Vector2f pos = entity.gridPos
         if (pos.x < 0 || pos.x > trackDef.width ||
                 pos.y < 0 || pos.y > trackDef.height) {
             // Illegal state - outside of track bounds
