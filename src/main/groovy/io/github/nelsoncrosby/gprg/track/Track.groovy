@@ -24,6 +24,8 @@ class Track {
     Vector2f size
     Deque<Vector2f> startLocations
     TrackInfo.Version1 info
+    boolean drawGrid = false
+    void toggleGrid() {drawGrid = !drawGrid}
 
     Color offTrack = new Color(0, 100, 0, 255)
     @SuppressWarnings("GroovyUnusedDeclaration")
@@ -161,5 +163,18 @@ class Track {
      */
     void render(Graphics gx, Camera camera) {
         camera.draw(gx, trackDef, camera.position.negate(), CELL_WIDTH_VECT)
+        if (drawGrid) {
+            gx.color = new Color(0, 0, 0, 0.1f)
+            for (int i = 1; i < trackDef.width; i++) {
+                Vector2f pos1 = camera.getScreenPos(new Vector2f(i, 0), CELL_WIDTH)
+                Vector2f pos2 = camera.getScreenPos(new Vector2f(i, trackDef.height), CELL_WIDTH)
+                gx.drawLine(pos1.x, pos1.y, pos2.x, pos2.y)
+            }
+            for (int i = 1; i < trackDef.height; i++) {
+                Vector2f pos1 = camera.getScreenPos(new Vector2f(0, i), CELL_WIDTH)
+                Vector2f pos2 = camera.getScreenPos(new Vector2f(trackDef.width, i), CELL_WIDTH)
+                gx.drawLine(pos1.x, pos1.y, pos2.x, pos2.y)
+            }
+        }
     }
 }

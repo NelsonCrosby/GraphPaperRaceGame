@@ -98,7 +98,8 @@ class GameState extends BasicGameState {
                 decPlayers  : { if (players.size() > 1) entities.remove(players[-1]) },
                 zoomIn      : { camera.adjustZoom(Camera.DEFAULT_ZOOM_FACTOR) },
                 zoomOut     : { camera.adjustZoom(Camera.DEFAULT_ZOOM_OUT_FACTOR) },
-                zoomReset   : { camera.resetZoom() }
+                zoomReset   : { camera.resetZoom() },
+                toggleGrid  : { track.toggleGrid() }
         ]
         input = new BoundInput(gc.input, pollBindings, eventBindings)
         trackID = 0
